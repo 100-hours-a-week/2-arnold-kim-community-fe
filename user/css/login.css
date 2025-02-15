@@ -56,7 +56,7 @@
   
   /* 로그인 제목 */
   #login-title {
-    font-weight: 700;
+    font-weight: bold;
     font-size: 32px;
     line-height: 38.19px;
     margin-bottom: 20px;
@@ -64,7 +64,7 @@
   
   /* 입력 필드 스타일 */
   label {
-    font-weight: 700;
+    font-weight: bold;
     font-size: 15px;
     display: block;
     text-align: left;
