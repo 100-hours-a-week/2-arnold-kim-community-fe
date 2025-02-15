@@ -8,17 +8,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     const passwordError = document.getElementById("password-error")
     const passwordCheckError = document.getElementById("password-check-error")
     const usernameError = document.getElementById("username-error")
+    const profileImageError = document.getElementById("profile-error")
 
     const signinBtn = document.getElementById("signin-btn");
 
+    const profileUpload = document.getElementById("profile-upload")
+    const profileImage = document.getElementById("profile-image")
+
     let users = [];
+    let validatePasswordCheck = false;
+    let validateUsername = false;
+    let validateProfile = false;
 
     async function getUsers() {
         try {
             const response = await fetch("../data/user.json");
             if (!response.ok) throw new Error("사용자 데이터를 불러오는데 실패했습니다.");
-            users = await response.json();
-
+            const jsonData = await response.json();
+            const localData = JSON.parse(localStorage.getItem("users")) || [];
+            users = [...jsonData, ...localData]; 
         } catch (error) {
             console.log(error);
         }
@@ -40,6 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     emailInput.addEventListener("input", () => {
         const user = users.find(user => user.email === emailInput.value);
         const email = emailInput.value;
+        console.log(JSON.parse(localStorage.getItem("users")))
 
         if (email === "") {
             emailError.textContent = "*이메일을 입력해주세요.";
@@ -71,6 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else if (passwordInput.value !== passwordCheckInput.value){
             passwordCheckError.textContent = "*비밀번호가 다릅니다.";
         } else {
+            validatePasswordCheck = true;
             passwordCheckError.textContent = "";
         }
 
@@ -91,6 +101,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             usernameError.textContent = "*중복된 닉네임 입니다.";
         }
         else {
+            validateUsername = true;
             usernameError.textContent = "";
         }
 
@@ -98,14 +109,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     function updateButtonState() {
-        if (validateEmail(emailInput.value) && validatePassword(passwordInput.value)) {
+        if (validateEmail(emailInput.value) && validatePassword(passwordInput.value) && validatePasswordCheck && validateUsername && validateProfile) {
             signinBtn.classList.add("active");
             signinBtn.removeAttribute("disabled");
         } else {
             signinBtn.classList.remove("active");
             signinBtn.setAttribute("disabled", "true");
         }
-    }
+    };
+
+    // 프로필 이미지 변경
+    profileUpload.addEventListener("change", async function (event) {
+        const file = event.target.files[0];
+        profileImageError.textContent = "*프로필 사진을 추가해주세요."
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                profileImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            validateProfile = true;
+            profileImageError.textContent = ""
+        } else {
+            profileImage.src = "../assets/default_img.png"; // 기본 이미지로 변경
+            profileImageError.textContent = "*프로필 사진을 추가해주세요."
+            validateProfile = false;
+        }
+
+        updateButtonState();
+    });
 
     // 회원가입 버튼 클릭 이벤트
     signinBtn.addEventListener("click", (e) => {
@@ -114,13 +147,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         const newUser = {
             email: emailInput.value,
             password: passwordInput.value,
-            username: usernameInput.value
+            username: usernameInput.value,
+            profileImage: profileImage.src
         };
 
         users.push(newUser);
         localStorage.setItem("users", JSON.stringify(users));
-
-        console.log(users);
         
         window.location.href = "login.html";
     });

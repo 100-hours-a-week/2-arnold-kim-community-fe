@@ -82,8 +82,8 @@
   
   /* 동그라미 프로필 버튼 */
   .profile-circle {
-    width: 149px;
-    height: 149px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
@@ -97,8 +97,8 @@
   
   /* 프로필 이미지 */
   #profile-image {
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 
