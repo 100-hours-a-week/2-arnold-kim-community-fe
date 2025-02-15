@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>아무 말 대잔치</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="css/signin.css">
+    </head>
+    <body>
+        <!-- 상단 메뉴 -->
+        <div id="header-container">
+            <div id="header-content">
+                <button id="back">＜</button>
+                <h1 id="header">아무 말 대잔치</h1>
+            </div>
+        </div>
+
+        <!--로그인 폼-->
+        <main>
+            <div id="signin-container">
+                <h2 id="signin-title">회원가입</h2>
+
+                <div class="profile-container">
+                    <label for="profile">프로필 사진</label>
+                    <p class="error-message" id="profile-error"></p>
+                    <div class="upload-container">
+                        <label for="profile-upload" class="profile-circle">
+                            <img id="profile-image" src="../assets/default_img.png">
+                            <input type="file" id="profile-upload" accept="image/*" style="display: none;">
+                        </label>
+                    </div>
+                </div>
+        
+                <!-- 이메일 입력 -->
+                <label for="email">이메일*</label>
+                <input type="email" id="email" placeholder="이메일을 입력하세요">
+                <p class="error-message" id="email-error"></p>
+
+                <!-- 비밀번호 입력 -->
+                <label for="password">비밀번호*</label>
+                <input type="password" id="password" placeholder="비밀번호를 입력하세요">
+                <p class="error-message" id="password-error"></p>
+
+                <!-- 비밀번호 확인 입력-->
+                <label for="password-check">비밀번호 확인*</label>
+                <input type="password" id="password-check" placeholder="비밀번호를 한번 더 입력하세요">
+                <p class="error-message" id="password-check-error"></p>
+                
+                <!-- 비밀번호 입력 -->
+                <label for="username">닉네임*</label>
+                <input type="text" id="username" placeholder="닉네임을 입력하세요">
+                <p class="error-message" id="username-error"></p>
+        
+                <!-- 회원가입 버튼 -->
+                <button id="signin-btn" disabled>회원가입</button>
+
+                <!-- 로그인하러 가기 버튼-->
+                 <button id="back-to-login">로그인하러 가기</button>
+            </div>
+        </main>
+        <script type="module" src="js/signin.js"></script>
+
+    </body>
+</html>

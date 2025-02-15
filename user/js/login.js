@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 회원가입 버튼 클릭 시 이동
     signupBtn.addEventListener("click", () => {
-        window.location.href = "signup.html";
+        window.location.href = "signin.html";
     });
 
     await getUsers();
