@@ -1,0 +1,89 @@
+document.addEventListener("DOMContentLoaded", async () => {
+    const postList = document.getElementById("post-list");
+    const userProfile = document.getElementById("user-profile");
+    const makePostBtn = document.getElementById("make-post-btn");
+    const postListContainer = document.getElementById("post-list-container"); 
+    let posts = [];
+    let currentPage = 1;
+    const postsPerPage = 5;
+    let isFetching = false; 
+
+    userProfile.addEventListener("click", () => {
+        window.location.href = "editProfile.html";
+    });
+
+    makePostBtn.addEventListener("click", () => {
+        window.location.href = "makePost.html";
+    });
+
+    async function fetchPosts() {
+        try {
+            const response = await fetch("../data/posts.json");
+            if (!response.ok) throw new Error("게시글 데이터를 불러오는 데 실패했습니다.");
+            posts = await response.json();
+            loadMorePosts(); 
+        } catch (error) {
+            console.error("데이터 로딩 오류:", error);
+        }
+    }
+
+    function formatCount(count) {
+        if (count >= 100000) return (count / 100000).toFixed(0) + "k";
+        if (count >= 10000) return (count / 10000).toFixed(0) + "k";
+        if (count >= 1000) return (count / 1000).toFixed(0) + "k";
+        return count;
+    }
+
+    function renderPost(postData) {
+        const postElement = document.createElement("div");
+        postElement.classList.add("post-card");
+
+        postElement.innerHTML = `
+            <h3 class="post-title">${postData.title.length > 26 ? postData.title.substring(0, 26) + "..." : postData.title}</h3>
+            <div class="post-info">
+                <span>좋아요 ${formatCount(postData.likes)} 댓글 ${formatCount(postData.comments)} 조회수 ${formatCount(postData.views)}</span>
+                <span>${postData.date}</span>
+            </div>
+            <div class="post-divider"></div>
+            <div class="post-author">
+                <img class="author-img" src="${postData.authorProfile}" alt="작성자">
+                <span>${postData.author}</span>
+            </div>
+        `;
+
+        postElement.addEventListener("click", () => {
+            window.location.href = `post.html?id=${postData.id}`;
+        });
+
+        postList.appendChild(postElement);
+    }
+
+    function loadMorePosts() {
+        if (isFetching) return;
+        isFetching = true;
+        const start = (currentPage - 1) * postsPerPage;
+        const end = start + postsPerPage;
+        const newPosts = posts.slice(start, end);
+
+        if (newPosts.length === 0) {
+            postListContainer.removeEventListener("scroll", handleScroll); 
+            return;
+        }
+
+        newPosts.forEach(renderPost);
+        currentPage++;
+        isFetching = false;
+    }
+
+    function handleScroll() {
+        const { scrollTop, scrollHeight, clientHeight } = postListContainer;
+
+        if (scrollTop + clientHeight >= scrollHeight - 10) {
+            loadMorePosts();
+        }
+    }
+
+    postListContainer.addEventListener("scroll", handleScroll);
+
+    await fetchPosts();
+});
