@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     emailInput.addEventListener("input", () => {
         const user = users.find(user => user.email === emailInput.value);
         const email = emailInput.value;
-        console.log(JSON.parse(localStorage.getItem("users")))
 
         if (email === "") {
             emailError.textContent = "*이메일을 입력해주세요.";
@@ -150,9 +149,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             username: usernameInput.value,
             profileImage: profileImage.src
         };
-
-        users.push(newUser);
-        localStorage.setItem("users", JSON.stringify(users));
         
         window.location.href = "login.html";
     });

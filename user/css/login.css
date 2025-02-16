@@ -18,9 +18,7 @@
   /* 헤더 스타일 */
   #header-container {
     width: 100%;
-    max-width: 1920px;
     height: 10vh;
-
     border-bottom: 1px solid #000000;
     display: flex;
     align-items: center;
