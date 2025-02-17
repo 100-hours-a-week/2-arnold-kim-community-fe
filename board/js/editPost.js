@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     backToPosts.addEventListener("click", () => {
-        // 수정 버튼을 눌러서 온 포스트의 id로 가야함. 더미데이터로 일단 1로 고정
         window.location.href = `post.html?id=${postId}`;
     });
 
@@ -43,6 +42,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("데이터 로딩 오류:", error);
         }
     }
+
+    postTitle.addEventListener("input", () => {
+        if (postTitle.value.length > 26) {
+            alert("제목은 최대 26자까지만 입력 가능합니다.");
+            postTitle.value = postTitle.value.substring(0, 26);
+        }
+    });
 
     postImageUpload.addEventListener("change", (event) => {
         const file = event.target.files[0];
