@@ -1,0 +1,272 @@
+/* 기본 설정 */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 헤더 */
+#header-container {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: white;
+    z-index: 1000;
+}
+
+#header {
+    font-weight: bold;
+    font-size: 32px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#user-profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+}
+
+#back {
+    font-size: 32px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    left: 20px;
+}
+
+main {
+    width: 50%;
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+hr {
+    width: 100%;
+}
+
+#post-container {
+    width: 90%;
+    padding: 15px;
+    background-color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+#post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    width: 100%;
+}
+
+#post-content{
+    font-size: 15px;
+}
+
+#post-image{
+    width: 100%;
+}
+
+#author-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#author-profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+#author-name {
+    font-weight: bold;
+}
+
+#post-actions {
+    display: flex;
+    gap: 10px; 
+}
+
+/* 수정, 삭제 버튼 스타일 */
+#edit-post,
+#delete-post {
+    border-radius: 8px;
+    border: 1px solid rgb(204, 204, 204);
+    background-color: white;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+
+/* 좋아요, 조회수, 댓글수 버튼 */
+#post-stats button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin: 5px;
+    width: 120px;
+    height: 70px;
+    background: #d9d9d9;
+    font-size: 20px;
+}
+
+#like-btn{
+    cursor: pointer;
+}
+
+#like-btn.active {
+    background-color: #ACA0EB;
+}
+
+#post-comment-hr {
+    width: 100%;
+    margin: 20px;
+}
+/* 댓글 섹션 */
+#comment-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background:rgba(248, 248, 248, 0.753);
+}
+
+/* 댓글 입력창 */
+#comment-input {
+    width: 99%;
+    height: 120px;
+    border:rgb(248, 248, 248, 0.753);
+    background:rgba(248, 248, 248, 0.753);
+    border-bottom: 1px solid #ccc;
+    font-size: 16px;
+    padding-top: 2px
+}
+
+/* 댓글 등록 버튼 */
+#comment-submit {
+    align-self: flex-end;
+    padding: 8px 32px;
+    border-radius: 16px;
+    border: none;
+    color: white;
+    background-color: #aca0ef;
+    cursor: not-allowed;
+    margin: 5px;
+}
+
+#comment-submit.active {
+    background-color: #7f6aee; /* ✅ 활성화 시 색상 변경 */
+    cursor: pointer;
+}
+#comment-list {
+    width: 100%;
+}
+
+/* 댓글 컨테이너 */
+.comment {
+    width: 100%;
+    padding: 10px;
+}
+
+/* 댓글 헤더: 프로필, 작성자, 날짜 + 수정/삭제 버튼 */
+.comment-header {
+    display: flex;
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center;
+    width: 100%;
+}
+
+/* 작성자 정보 (왼쪽 정렬) */
+.comment-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* 간격 */
+}
+
+/* 프로필 이미지 */
+.comment-profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+/* 작성자 이름 */
+.comment-author {
+    font-weight: bold;
+}
+
+/* 댓글 수정/삭제 버튼 컨테이너 (오른쪽 정렬) */
+.comment-actions {
+    display: flex;
+    gap: 5px;
+    margin-right: 15px;
+}
+
+/* 댓글 수정/삭제 버튼 스타일 */
+.edit-comment,
+.delete-comment {
+    display: none; /* 기본적으로 숨김 */
+    padding: 4px 8px;
+    border: 1px solid #aca0ef;
+    border-radius: 10px;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* 버튼 hover 효과 */
+.edit-comment:hover,
+.delete-comment:hover {
+    background-color: #f0f0f0;
+}
+
+/* 댓글 내용 (왼쪽 정렬, 다음 줄 표시) */
+.comment-content {
+    margin-top: 5px;
+    text-align: left;
+}
+
+
+/* 모달 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+}
