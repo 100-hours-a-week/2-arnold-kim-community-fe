@@ -1,0 +1,138 @@
+/* 기본 설정 */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 헤더 */
+#header-container {
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: white;
+    z-index: 1000;
+}
+
+#header {
+    font-weight: bold;
+    font-size: 32px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#user-profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+}
+
+#back {
+    font-size: 32px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    left: 20px;
+}
+
+main {
+    width: 50%;
+    margin-top: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#make-post-container {
+    background-color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+    align-items: center;
+    width: 100%;
+}
+#make-header{
+    text-align: center;
+}
+
+#make-title {
+    font-weight: bold;
+}
+#make-title-header,
+#post-content-header,
+#post-title,
+#post-content {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding : 15px;
+}
+#post-content {
+    height: 160px;
+    max-height: 320px;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+    font-weight: 100;
+}
+
+#make-image {
+    margin-top: 15px;
+    text-align: left; 
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+}
+
+#post-image-upload {
+    margin-top: 5px; 
+}
+
+#post-image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+#make-button {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; 
+    width: 100%;
+}
+
+#save-make {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #aca0eb;
+    color: white;
+    width: 80%; 
+    max-width: 400px; 
+    text-align: center;
+}
+
+#save-make.active {
+    background-color: #7f6aee;
+    cursor: pointer;
+}
