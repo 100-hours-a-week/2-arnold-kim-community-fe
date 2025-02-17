@@ -57,7 +57,6 @@ main {
     align-items: center;
 }
 
-/* 수정 페이지 컨테이너 */
 #edit-post-container {
     background-color: white;
     transition: transform 0.2s, box-shadow 0.2s;
@@ -69,7 +68,6 @@ main {
     text-align: center;
 }
 
-/* 제목 입력 */
 #edit-title {
     font-weight: bold;
 }
@@ -87,21 +85,18 @@ main {
     max-height: 320px;
 }
 
-/* 이미지 업로드 */
 #edit-image {
     margin-top: 15px;
-    text-align: left; /* ✅ 왼쪽 정렬 */
+    text-align: left; 
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* ✅ 왼쪽 정렬 */
+    align-items: flex-start; 
 }
 
-/* 이미지 업로드 버튼 */
 #post-image-upload {
-    margin-top: 5px; /* 간격 추가 */
+    margin-top: 5px; 
 }
 
-/* 게시글 이미지 */
 #post-image {
     width: 100%;
     max-width: 400px;
@@ -110,15 +105,13 @@ main {
     margin-top: 10px;
 }
 
-/* 버튼 스타일 */
 #edit-button {
     margin-top: 20px;
     display: flex;
-    justify-content: center; /* ✅ 버튼을 가운데 정렬 */
+    justify-content: center; 
     width: 100%;
 }
 
-/* 수정 완료 버튼 */
 #save-edit {
     padding: 12px 24px;
     border: none;

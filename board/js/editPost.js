@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "post.html?id=1";
     });
 
-    // ✅ JSON에서 게시글 불러오기
     async function fetchPost() {
         try {
             const response = await fetch("../data/posts.json");
@@ -36,7 +35,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            // ✅ 기존 게시글 내용 적용
             postTitle.value = post.title;
             postContent.value = post.content;
             postImage.src = post.image || "../assets/userProfile.jpg";
@@ -46,7 +44,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // ✅ 이미지 업로드 시 변경 처리
     postImageUpload.addEventListener("change", (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -58,13 +55,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // ✅ "수정 완료" 버튼 클릭 이벤트
     saveEditBtn.addEventListener("click", () => {
         alert("게시글이 수정되었습니다.");
         window.location.href = `post.html?id=${postId}`;
     });
 
-
-    // ✅ JSON 데이터 불러오기
     await fetchPost();
 })
