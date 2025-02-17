@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>게시글 상세조회</title>
     <link rel="stylesheet" href="css/post.css">
+    <script src="../component/modal.js"></script>
+    <link rel="stylesheet" href="../component/modal.css">
 </head>
 <body>
     <!-- 상단 메뉴 -->
@@ -20,7 +22,7 @@
 
             <div id="post-info">
                 <div id="author-details">
-                    <img id="author-profile" class="profile-img" src="../assets/default-profile.png">
+                    <img id="author-profile" class="profile-img" src="../assets/userProfile.jpg">
                     <p id="author-name"></p>
                     <p id="post-date"></p>
                 </div>
@@ -59,28 +61,6 @@
         <!-- 댓글 목록 -->
         <div id="comment-list"></div>
     </main>
-
-    <!-- 게시글 삭제 모달 -->
-    <div id="post-delete-modal" class="modal hidden">
-        <div class="modal-content">
-            <p>게시글을 삭제하시겠습니까?<br>삭제한 내용은 복구할 수 없습니다.</p>
-            <div class="modal-buttons">
-                <button class="modal-cancel">취소</button>
-                <button class="modal-confirm" id="confirm-post-delete">확인</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 댓글 삭제 모달 -->
-    <div id="comment-delete-modal" class="modal hidden">
-        <div class="modal-content">
-            <p>댓글을 삭제하시겠습니까?<br>삭제한 내용은 복구할 수 없습니다.</p>
-            <div class="modal-buttons">
-                <button class="modal-cancel">취소</button>
-                <button class="modal-confirm" id="confirm-comment-delete">확인</button>
-            </div>
-        </div>
-    </div>
 
     <script src="js/post.js"></script>
 </body>
