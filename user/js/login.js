@@ -75,10 +75,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         const user = users.find(user => user.email === email && user.password === password);
 
         if (user) {
-            window.location.href = "../board/post.html";
+            window.location.href = "../board/posts.html";
         } else {
             loginFailError.textContent = "*아이디 또는 비밀번호를 확인해주세요"
         }
+
+        sessionStorage.setItem("user", JSON.stringify(user));
     });
 
     // 회원가입 버튼 클릭 시 이동

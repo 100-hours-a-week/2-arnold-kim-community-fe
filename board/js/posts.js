@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         postElement.innerHTML = `
             <h3 class="post-title">${postData.title.length > 26 ? postData.title.substring(0, 26) + "..." : postData.title}</h3>
             <div class="post-info">
-                <span>좋아요 ${formatCount(postData.likes)} 댓글 ${formatCount(postData.comments)} 조회수 ${formatCount(postData.views)}</span>
+                <span>좋아요 ${formatCount(postData.likes)} 댓글 ${formatCount(postData.comments.length)} 조회수 ${formatCount(postData.views)}</span>
                 <span>${postData.date}</span>
             </div>
             <div class="post-divider"></div>
