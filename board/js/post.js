@@ -101,8 +101,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     editPostBtn.addEventListener("click", () => {
-        // 수정 버튼을 눌러서 온 포스트의 id로 가야함. 더미데이터로 일단 1로 고정
-        window.location.href = "editPost.html?id=1";
+        window.location.href = `editPost.html?id=${postId}`;
     });
 
     // ✅ 삭제 버튼 클릭 시 모달 표시
