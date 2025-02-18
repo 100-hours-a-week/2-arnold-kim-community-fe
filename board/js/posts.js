@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const postElement = document.createElement("div");
         postElement.classList.add("post-card");
 
+        const defaultProfileImg = "../assets/default_img.png"; 
+
         postElement.innerHTML = `
             <h3 class="post-title">${postData.title.length > 26 ? postData.title.substring(0, 26) + "..." : postData.title}</h3>
             <div class="post-info">
@@ -44,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             </div>
             <div class="post-divider"></div>
             <div class="post-author">
-                <img class="author-img" src="${postData.authorProfile}" alt="작성자">
+                <img class="author-img" src="${postData.authorProfile ? postData.authorProfile : defaultProfileImg}">
                 <span>${postData.author}</span>
             </div>
         `;
