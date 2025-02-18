@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const commentInput = document.getElementById("comment-input");
     const commentSubmit = document.getElementById("comment-submit");
 
+    const currentUser = JSON.parse(sessionStorage.getItem("user"))?.username || "";
+
     userProfile.addEventListener("click", () => {
         window.location.href = "editProfile.html";
     });
@@ -53,6 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             viewCount.textContent = formatCount(post.views);
             commentCount.textContent = formatCount(post.comments.length);
 
+            postBtnDisplay();
             renderComments(post.comments);
         } catch (error) {
             console.error("데이터 로딩 오류:", error);
@@ -98,11 +101,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
+    function postBtnDisplay(){
+        if (currentUser === authorName.textContent){
+            editPostBtn.style.display = "inline-block";
+            deletePostBtn.style.display = "inline-block";
+        }
+    }
+
     function renderComments(comments) {
         const commentList = document.getElementById("comment-list");
         commentList.innerHTML = ""; 
-    
-        const currentUser = JSON.parse(sessionStorage.getItem("user"))?.username || "";
     
         let editingComment = null;
     

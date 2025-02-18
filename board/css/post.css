@@ -211,6 +211,8 @@ hr {
     margin-right: 15px;
 }
 
+.edit-post,
+.delete-post,
 .edit-comment,
 .delete-comment {
     display: none; 
