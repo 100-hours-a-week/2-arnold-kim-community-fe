@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let isFetching = false; 
 
     userProfile.addEventListener("click", () => {
-        window.location.href = "editProfile.html";
+        window.location.href = "../../user/editProfile.html";
     });
 
     makePostBtn.addEventListener("click", () => {
