@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     likeBtn.addEventListener("click", () => {
-        let count = parseInt(likeCount.textContent.replace("k", "")) || 0;
+        let count = parseInt(likeCount.textContent.replace("k", "000")) || 0;
         if (likeBtn.classList.contains("active")) {
             likeBtn.classList.remove("active");
             likeBtn.style.backgroundColor = "#d9d9d9";
