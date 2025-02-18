@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let users = [];
 
-    /** 📌 ✅ 유저 데이터 불러오기 */
     async function getUsers() {
         try {
             const response = await fetch("../data/user.json");
@@ -23,22 +22,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    /** 📌 ✅ 로그인된 유저 정보 가져오기 */
     function getLoggedInUser() {
         return JSON.parse(localStorage.getItem("user")) || null;
     }
 
-    /** 📌 ✅ 로그인된 유저 정보가 있다면 이메일 표시 */
     function displayUserEmail() {
         const loggedInUser = getLoggedInUser();
         if (loggedInUser && loggedInUser.email) {
-            userEmail.textContent = loggedInUser.email; // ✅ 이메일 표시
+            userEmail.textContent = loggedInUser.email; 
         } else {
-            userEmail.textContent = "로그인된 계정이 없습니다."; // 기본 메시지
+            userEmail.textContent = "로그인된 계정이 없습니다.";
         }
     }
 
-    /** 📌 ✅ 드롭다운 메뉴 생성 */
     profileDropdown.classList.add("profile-dropdown");
     profileDropdown.innerHTML = `
         <ul>
@@ -49,11 +45,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
     document.body.appendChild(profileDropdown);
 
-    /** 📌 ✅ 프로필 클릭 시 드롭다운 메뉴 표시 */
     function updateDropdownPosition() {
         const rect = userProfile.getBoundingClientRect();
-        profileDropdown.style.top = `${rect.bottom + window.scrollY + 5}px`; // 아이콘 아래 위치
-        profileDropdown.style.left = `${rect.left - profileDropdown.offsetWidth - 150}px`; // 아이콘 왼쪽 정렬
+        profileDropdown.style.top = `${rect.bottom + window.scrollY + 5}px`; 
+        profileDropdown.style.left = `${rect.left - profileDropdown.offsetWidth - 150}px`; 
     }
 
     userProfile.addEventListener("click", () => {
@@ -65,7 +60,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    /** 📌 ✅ 드롭다운 항목 클릭 이벤트 */
+    document.getElementById("edit-profile-menu").addEventListener("click", () => {
+        window.location.href = "editProfile.html"
+    })
+
     document.getElementById("edit-password-menu").addEventListener("click", () => {
         window.location.href = "editPassword.html";
     });
@@ -76,15 +74,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function updateButtonState() {
         if (usernameError.textContent === "" && usernameInput.value.trim() !== "") {
-            editProfileBtn.classList.add("active"); // ✅ 버튼 활성화
+            editProfileBtn.classList.add("active"); 
             editProfileBtn.removeAttribute("disabled");
         } else {
-            editProfileBtn.classList.remove("active"); // ✅ 버튼 비활성화
+            editProfileBtn.classList.remove("active"); 
             editProfileBtn.setAttribute("disabled", "true");
         }
     }
 
-    /** 📌 ✅ 닉네임 입력 이벤트 리스너 */
     usernameInput.addEventListener("input", () => {
         const username = usernameInput.value.trim();
         const isDuplicate = users.some(user => user.username === username);
@@ -96,14 +93,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else if (isDuplicate) {
             usernameError.textContent = "*중복된 닉네임 입니다.";
         } else {
-            usernameError.textContent = ""; // ✅ 에러 메시지가 없으면 버튼 활성화 가능
+            usernameError.textContent = ""; 
         }
 
-        updateButtonState(); // ✅ 버튼 활성화 상태 업데이트
+        updateButtonState();
     });
 
-
-    /** 📌 ✅ 프로필 사진 변경 */
     profileUpload.addEventListener("change", function (event) {
         const file = event.target.files[0];
 
@@ -116,17 +111,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    /** 📌 ✅ 수정하기 버튼 클릭 시 성공 메시지 */
     editProfileBtn.addEventListener("click", () => {
         if (usernameError.textContent === "") {
-            editCompleteBtn.style.display = "block"; // 토스트 메시지 표시
+            editCompleteBtn.style.display = "block"; 
             setTimeout(() => {
                 editCompleteBtn.style.display = "none";
             }, 2000);
         }
     });
 
-    /** 📌 ✅ 회원탈퇴 버튼 클릭 시 모달 표시 */
     deleteAccountBtn.addEventListener("click", () => {
         setModal("<h3>회원탈퇴 하시겠습니까?</h3><br>작성된 게시글과 댓글은 삭제됩니다.", () => {
             alert("회원 탈퇴가 완료되었습니다.");
@@ -134,6 +127,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
-    await getUsers(); // ✅ 유저 정보 불러오기
+    await getUsers(); 
     displayUserEmail();
 });
