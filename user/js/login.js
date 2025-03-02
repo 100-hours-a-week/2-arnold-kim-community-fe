@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const errorMessage = document.getElementById("error-message");
     const loginFailError = document.getElementById("login-fail");
 
+    // fetchAPI 적용시 필요 없는 코드
     let users = [];
 
     async function getUsers() {
@@ -21,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.log(error);
         }
     }
+    // 까지
 
     // 이메일 유효성 검사
     function validateEmail(email) {
@@ -75,6 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const email = emailInput.value;
         const password = passwordInput.value;
 
+        // fetchAPI 적용시 필요 없는 코드
         const user = users.find(user => user.email === email && user.password === password);
 
         if (user) {
@@ -83,6 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             loginFailError.textContent = "*아이디 또는 비밀번호를 확인해주세요"
         }
+        // 까지
         
         // fetch API를 이용하여 로그인 확인
         // try {
@@ -103,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         //     } else {
         //         const errorData = await response.json();
         //         loginFailError.textContent = `*아이디 또는 비밀번호를 확인해주세요`;
-        //         console.log("${errorData.message}")
+        //         console.log("${errorData.message}");
         //     }
         // } catch (error) {
         //     console.error("로그인 요청 실패:", error);

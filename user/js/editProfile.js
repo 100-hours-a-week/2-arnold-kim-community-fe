@@ -99,6 +99,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateButtonState();
     });
 
+    // fetchAPI를 이용항 프로필 이미지 업로드
+    // profileUpload.addEventListener("click", async (e) => {
+    //     e.preventDefault();
+    //     const file = profileImage.files[0];
+    //     if (!file){
+    //         profileImage.src = "../assets/default_img.png"; // 기본 이미지로 변경
+    //         profileImageError.textContent = "*프로필 사진을 추가해주세요."
+    //         validateProfile = false;
+    //     }
+
+    //     const formData = new formData();
+    //     formData.append("image", file);
+
+    //     try{
+    //         const response = await fetch("${CONFIG.API_BASE_URL}/users/image", {
+    //             method: "POST",
+    //             body: formData
+    //         });
+
+    //     } catch (error){
+    //         console.error("이미지 업로드 에러 ", error);
+    //         profileImageError.textContent = "*이미지 업로드 중 알 수 없는 에러가 발생했습니다."
+    //     }
+    // });
+    
     profileUpload.addEventListener("change", function (event) {
         const file = event.target.files[0];
 
