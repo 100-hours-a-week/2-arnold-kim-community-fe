@@ -22,7 +22,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     const commentInput = document.getElementById("comment-input");
     const commentSubmit = document.getElementById("comment-submit");
 
-    const currentUser = JSON.parse(sessionStorage.getItem("user"))?.username || "";
+    let currentUser;
+    let comments;
+
+    // fetch API를 이용하여 유저 정보 가져오기
+    async function getUser() {
+        try {
+            const response = await fetch("${CONFIG.API_BASE_URL/users/info}", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                currentUser = data.username;
+            }
+        } catch (error) {
+            alert(error);
+        }
+
+    }
+
 
     userProfile.addEventListener("click", () => {
         window.location.href = "editProfile.html";
@@ -60,6 +83,51 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (error) {
             console.error("데이터 로딩 오류:", error);
         }
+
+        // fetch api를 이용하여 게시물 정보 가져오기
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
+
+            const result = await response.json();
+
+            const post = result.data;
+            if (!post) {
+                postTitle.textContent = "게시글을 찾을 수 없습니다.";
+                return;
+            }
+
+            postTitle.textContent = post.title;
+            postContent.textContent = post.content;
+            authorProfile.src = post.authorProfile || "../assets/userProfile.jpg";
+            authorName.textContent = post.author;
+            postDate.textContent = post.date;
+            postImage.src = post.image || "../assets/userProfile.jpg";
+
+            likeCount.textContent = formatCount(post.likes);
+            viewCount.textContent = formatCount(post.views);
+
+            // 댓글이 배열로 온다고 가정 => commentCount 계산
+            // (명세서에 comments가 배열 형태)
+            commentCount.textContent = formatCount(post.comments.length);
+            comments = post.comments;
+
+            postBtnDisplay();
+            renderComments(post.comments);
+        } catch (error) {
+            console.error("데이터 로딩 오류:", error);
+            postTitle.textContent = error.message;
+        }
     }
 
     function formatCount(count) {
@@ -95,9 +163,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     deletePostBtn.addEventListener("click", () => {
-        setModal("<h3>게시글을 삭제하시겠습니까?</h3>삭제한 내용은 복구할 수 없습니다.", () => {
+        setModal("<h3>게시글을 삭제하시겠습니까?</h3>삭제한 내용은 복구할 수 없습니다.", async () => {
             alert("게시글이 삭제되었습니다.");
             window.location.href = "posts.html";
+
+            // fetch api를 사용하여 게시글 삭제하기
+            // try {
+            //     const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}`, {
+            //         method: "DELETE",
+            //         headers: {
+            //             "Authorization": `Bearer ${localStorage.getItem("token")}`
+            //         }
+            //     });
+
+            //     if (!response.ok) {
+            //         const resBody = await response.json();
+            //         throw new Error(resBody.message);
+            //     }
+
+            //     window.location.href = "posts.html";
+
+            // } catch (error) {
+            //     console.error(error);
+            //     alert(error.message);
+            // }
         });
     });
 
@@ -107,6 +196,77 @@ document.addEventListener("DOMContentLoaded", async () => {
             deletePostBtn.style.display = "inline-block";
         }
     }
+
+    async function fetchComments() {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message || "댓글 데이터를 불러오는 데 실패했습니다.");
+            }
+
+            const result = await response.json();
+            comments = result.data || [];
+            renderComments();
+        } catch (error) {
+            console.error("댓글 로딩 오류:", error);
+        }
+    }
+
+    async function editComment(commentId, newContent) {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify({
+                    content: newContent
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
+
+            await fetchComments();
+        } catch (error) {
+            console.error("댓글 수정 오류:", error);
+            alert(error.message);
+        }
+    }
+
+    async function deleteComment(commentId) {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
+
+            await fetchComments();
+            alert("댓글이 삭제되었습니다.");
+        } catch (error) {
+            console.error("댓글 삭제 오류:", error);
+            alert(error.message);
+        }
+    }
+    
 
     function renderComments(comments) {
         const commentList = document.getElementById("comment-list");
@@ -157,15 +317,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             deleteButton.addEventListener("click", () => {
-                setModal("<h3>댓글을 삭제하시겠습니까?</h3>삭제한 내용은 복구할 수 없습니다.", () => {
+                setModal("<h3>댓글을 삭제하시겠습니까?</h3>삭제한 내용은 복구할 수 없습니다.", async () => {
                     alert("댓글이 삭제되었습니다.");
+                    // await deleteComment(comment.commentAuthorId); 
                 });
             });
     
             commentList.appendChild(commentElement);
         });
 
-        commentSubmit.addEventListener("click", () => {
+        commentSubmit.addEventListener("click", async () => {
             if (editingComment) {
                 editingComment.textContent = commentInput.value.trim(); 
                 alert("댓글이 수정되었습니다.");
@@ -182,4 +343,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     await fetchPost();
+    await getUser();
+    await fetchComments();
 });

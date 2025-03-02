@@ -194,7 +194,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         setModal("<h3>회원탈퇴 하시겠습니까?</h3><br>작성된 게시글과 댓글은 삭제됩니다.", async () => {
             // fetch API를 이용한 회원 탈퇴
             // try {
-            //     // 실제 API 엔드포인트에 맞게 수정 필요
             //     const response = await fetch(`${CONFIG.API_BASE_URL}/users`, {
             //         method: "DELETE",
             //         headers: {
