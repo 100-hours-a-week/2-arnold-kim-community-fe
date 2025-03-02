@@ -11,8 +11,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const editCompleteBtn = document.getElementById("edit-profile-complete-btn");
 
     let users = [];
+    let user;
 
-    async function getUsers() {
+    async function getUser() {
         try {
             const response = await fetch("../data/user.json");
             if (!response.ok) throw new Error("유저 데이터를 불러오는 데 실패했습니다.");
@@ -21,6 +22,23 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("유저 데이터 로딩 오류:", error);
         }
 
+        // fetch API를 이용하여 유저 정보 가져오기
+        // try {
+        //     const response = await fetch("${CONFIG.API_BASE_URL/users/info}", {
+        //         method: "GET",
+        //         headers: {
+        //             "Authorization": `Bearer ${localStorage.getItem("token")}`
+        //         }
+        //     });
+
+        //     if (response.ok) {
+        //         const data = await response.json();
+
+        //         user = data;
+        //     }
+        // } catch (error) {
+        //     alert(error);
+        // }
 
     }
 
@@ -35,6 +53,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             userEmail.textContent = "로그인된 계정이 없습니다.";
         }
+
+        // userEmail.textContent = user.email;
     }
 
     profileDropdown.classList.add("profile-dropdown");
@@ -197,6 +217,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
-    await getUsers(); 
+    await getUser(); 
     displayUserEmail();
 });
