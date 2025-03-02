@@ -25,6 +25,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (error) {
             console.error("데이터 로딩 오류:", error);
         }
+
+        // fetch API를 이용하여 게시글 목록 가져오기
+        // try {
+        //     const response = await fetch(`${CONFIG.API_BASE_URL}/posts`, {
+        //         method: "GET",
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //             // "Authorization": `Bearer ${localStorage.getItem("token")}`
+        //         }
+        //     });
+
+        //     if (!response.ok) {
+        //         const errorData = await response.json();
+        //         throw new Error(errorData.message);
+        //     }
+
+        //     const result = await response.json(); 
+        //     posts = result.data;
+
+        //     loadMorePosts(); 
+        // } catch (error) {
+        //     console.error("데이터 로딩 오류:", error);
+        // }
     }
 
     function formatCount(count) {
