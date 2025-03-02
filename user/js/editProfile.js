@@ -20,6 +20,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (error) {
             console.error("유저 데이터 로딩 오류:", error);
         }
+
+
     }
 
     function getLoggedInUser() {
@@ -82,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // 기존 비밀번호 변경 코드
+    // 기존 닉네임 변경 코드
     usernameInput.addEventListener("input", async () => {
         const username = usernameInput.value.trim();
 
@@ -93,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             usernameError.textContent = ""; 
 
-            // fetchAPI를 이용한 비밀번호 변경 요청
+            // fetchAPI를 이용한 닉네임 변경 요청
             // try {
             //     const response = await fetch("${CONFIG.API_BASE_URL/users/username", {
             //         method: "PATCH",
