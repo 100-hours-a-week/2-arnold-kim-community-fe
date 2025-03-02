@@ -1,3 +1,5 @@
+import CONFIG from "../config.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
     const passwordInput = document.getElementById("password");
     const passwordCheckInput = document.getElementById("password-check");
@@ -56,12 +58,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     };
 
-    editBtn.addEventListener("click", () => {
+    editBtn.addEventListener("click", async () => {
         if (passwordError.textContent === "" && validatePasswordCheck) {
             editCompleteBtn.style.display = "block"; // 토스트 메시지 표시
-            setTimeout(() => {
-                editCompleteBtn.style.display = "none";
-            }, 2000);
+    
+            // fetch API를 이용하여 비밀번호 변경
+            // try {
+            //     const response = await fetch(`${CONFIG.API_BASE_URL}/users/password`, {
+            //         method: "PATCH", 
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //             "Authorization": `Bearer ${localStorage.getItem("token")}` // 토큰이 필요하다면 추가
+            //         },
+            //         body: JSON.stringify({
+            //             password: passwordInput.value
+            //         })
+            //     });
+
+            //     setTimeout(() => {
+            //         editCompleteBtn.style.display = "none";
+            //     }, 2000);
+
+            // } catch (error) {
+            //     alert(`오류 발생: ${error.message}`);
+            // }
         }
     });
 });
