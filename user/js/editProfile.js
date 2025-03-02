@@ -82,18 +82,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    usernameInput.addEventListener("input", () => {
+    // 기존 비밀번호 변경 코드
+    usernameInput.addEventListener("input", async () => {
         const username = usernameInput.value.trim();
-        const isDuplicate = users.some(user => user.username === username);
 
         if (username === "") {
             usernameError.textContent = "*닉네임을 입력해주세요.";
         } else if (username.length > 10) {
             usernameError.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
-        } else if (isDuplicate) {
-            usernameError.textContent = "*중복된 닉네임 입니다.";
         } else {
             usernameError.textContent = ""; 
+
+            // fetchAPI를 이용한 비밀번호 변경 요청
+            // try {
+            //     const response = await fetch("${CONFIG.API_BASE_URL/users/username", {
+            //         method: "PATCH",
+            //         headers: {
+            //             "Content-Type": "application/json",
+            //             "Authorization": `Bear ${localStorage.getItem("token")}`
+            //         },
+            //         body: JSON.stringify({
+            //             username: usernameInput.value
+            //         })
+            //     });
+    
+            //     if (response.ok) {
+            //         updateButtonState();
+            //     } else {
+            //         const result = await response.json();
+            //         usernameError.textContent = result.message;
+            //     }
+                
+            // } catch (error) {
+            //     usernameError.textContent = "${error.message}";
+            //     updateButtonState();
+            // } 
         }
 
         updateButtonState();
@@ -146,9 +169,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     deleteAccountBtn.addEventListener("click", () => {
-        setModal("<h3>회원탈퇴 하시겠습니까?</h3><br>작성된 게시글과 댓글은 삭제됩니다.", () => {
-            alert("회원 탈퇴가 완료되었습니다.");
-            window.location.href = "login.html";
+        setModal("<h3>회원탈퇴 하시겠습니까?</h3><br>작성된 게시글과 댓글은 삭제됩니다.", async () => {
+            // fetch API를 이용한 회원 탈퇴
+            // try {
+            //     // 실제 API 엔드포인트에 맞게 수정 필요
+            //     const response = await fetch(`${CONFIG.API_BASE_URL}/users`, {
+            //         method: "DELETE",
+            //         headers: {
+            //             "Authorization": `Bearer ${localStorage.getItem("token")}`
+            //         }
+            //     });
+
+            //     if (!response.ok) {
+            //         const resBody = await response.json();
+            //         throw new Error(resBody.message);
+            //     }
+
+            //     localStorage.removeItem("token");
+            //     window.location.href = "login.html";
+
+            // } catch (error) {
+            //     console.error(error);
+            //     alert(error.message);
+            // }
         });
     });
 
