@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const commentSubmit = document.getElementById("comment-submit");
 
     let currentUser;
-    let comments;
 
     // fetch API를 이용하여 유저 정보 가져오기
     async function getUser() {
@@ -220,6 +219,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    async function postComment(newContent){
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                body: JSON.stringify({
+                    content: newContent
+                })
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
+
+            await fetchComments();
+        } catch (error) {
+            console.error("댓글 수정 오류:", error);
+            alert(error.message);
+        }
+    }
+
     async function editComment(commentId, newContent) {
         try {
             const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
@@ -273,10 +297,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         commentList.innerHTML = ""; 
     
         let editingComment = null;
+        let editingCommentId = null;
     
         comments.forEach(comment => {
             const commentElement = document.createElement("div");
             commentElement.classList.add("comment");
+
+            commentElement.dataset.commentId = comment.commentId;
     
             commentElement.innerHTML = `
                 <div class="comment-header">
@@ -308,18 +335,22 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             editButton.addEventListener("click", () => {
+                const commentId = commentElement.dataset.commentId;
+
                 commentInput.value = commentContent.textContent.trim(); 
                 commentSubmit.textContent = "댓글 수정"; 
                 commentSubmit.classList.add("active"); 
                 commentSubmit.removeAttribute("disabled");
     
                 editingComment = commentContent; 
+                editingCommentId = commentId;
             });
 
             deleteButton.addEventListener("click", () => {
                 setModal("<h3>댓글을 삭제하시겠습니까?</h3>삭제한 내용은 복구할 수 없습니다.", async () => {
                     alert("댓글이 삭제되었습니다.");
-                    // await deleteComment(comment.commentAuthorId); 
+                    // const commentId = commentElement.dataset.commentId;
+                    // await deleteComment(commentId); 
                 });
             });
     
@@ -330,9 +361,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (editingComment) {
                 editingComment.textContent = commentInput.value.trim(); 
                 alert("댓글이 수정되었습니다.");
+                // editComment(editingCommentId, editingComment);
                 commentSubmit.textContent = "댓글 등록";
                 editingComment = null; 
             } else {
+                // postComment(commentInput.value);
                 alert("댓글이 등록되었습니다.");
             }
 
