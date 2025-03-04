@@ -140,10 +140,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             likeBtn.classList.remove("active");
             likeBtn.style.backgroundColor = "#d9d9d9";
             likeCount.textContent = formatCount(count - 1);
+            deleteLike();
         } else {
             likeBtn.classList.add("active");
             likeBtn.style.backgroundColor = "#ACA0EB";
             likeCount.textContent = formatCount(count + 1);
+            postLike();
         }
     });
 
@@ -196,6 +198,52 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    async function postLike() {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
+
+            const result = await response.json();
+            likeCount.textContent = result.data.likes;
+
+        } catch (error) {
+            console.error("댓글 로딩 오류:", error);
+        }
+    }
+
+    async function deleteLike() {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
+
+            const result = await response.json();
+            likeCount.textContent = result.data.likes;
+
+        } catch (error) {
+            console.error("댓글 로딩 오류:", error);
+        }
+    }
+
     async function fetchComments() {
         try {
             const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
@@ -239,7 +287,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             await fetchComments();
         } catch (error) {
-            console.error("댓글 수정 오류:", error);
+            console.error("댓글 작성 오류:", error);
             alert(error.message);
         }
     }
