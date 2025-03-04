@@ -1,3 +1,5 @@
+import CONFIG from "../config.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
     const backToPosts = document.getElementById("back");
     const userProfile = document.getElementById("user-profile");
@@ -64,6 +66,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveEditBtn.addEventListener("click", () => {
         alert("게시글이 수정되었습니다.");
         window.location.href = `post.html?id=${postId}`;
+
+        // fetch API를 이용한 게시글 수정
+        // try {
+        //     const response = await fetch(`${CONFIG.API_BASE_URL}/posts/{postId}`, {
+        //         method: "PATCH",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             "Authorization": `Bearer ${localStorage.getItem("token")}`
+        //         },
+        //         body: JSON.stringify({
+        //             title: postTitle.value.trim(),
+        //             content: postContent.value.trim(),
+        //             image: postImage.src 
+        //         })
+        //     });
+
+        //     if (!response.ok) {
+        //         const resData = await response.json();
+        //         throw new Error(resData.message);
+        //     }
+
+        //     const result = await response.json();
+        //     if (result.message === "post_success") {
+        //        window.location.href = `post.html?id=${postId}`;
+        //     } else {
+        //         throw new Error(result.message);
+        //     }
+
+        // } catch (error) {
+        //     console.error("게시글 등록 오류:", error);
+        //     errorMessage.textContent = error.message;
+        //     errorMessage.style.display = "block";
+        // }
     });
 
     await fetchPost();
