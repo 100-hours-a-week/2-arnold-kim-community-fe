@@ -1,3 +1,5 @@
+import CONFIG from "../config.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get("id");
@@ -25,25 +27,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     let currentUser;
 
     // fetch API를 이용하여 유저 정보 가져오기
-    async function getUser() {
-        try {
-            const response = await fetch("${CONFIG.API_BASE_URL/users/info}", {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            });
+    // async function getUser() {
+    //     try {
+    //         const response = await fetch("${CONFIG.API_BASE_URL/users/info}", {
+    //             method: "GET",
+    //             headers: {
+    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //             }
+    //         });
 
-            if (response.ok) {
-                const data = await response.json();
+    //         if (response.ok) {
+    //             const data = await response.json();
 
-                currentUser = data.username;
-            }
-        } catch (error) {
-            alert(error);
-        }
+    //             currentUser = data.username;
+    //         }
+    //     } catch (error) {
+    //         alert(error);
+    //     }
 
-    }
+    // }
 
 
     userProfile.addEventListener("click", () => {
@@ -84,49 +86,46 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         // fetch api를 이용하여 게시물 정보 가져오기
-        try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            });
+        // try {
+        //     const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}`, {
+        //         method: "GET",
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             "Authorization": `Bearer ${localStorage.getItem("token")}`
+        //         }
+        //     });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message);
-            }
+        //     if (!response.ok) {
+        //         const errData = await response.json();
+        //         throw new Error(errData.message);
+        //     }
 
-            const result = await response.json();
+        //     const result = await response.json();
 
-            const post = result.data;
-            if (!post) {
-                postTitle.textContent = "게시글을 찾을 수 없습니다.";
-                return;
-            }
+        //     const post = result.data;
+        //     if (!post) {
+        //         postTitle.textContent = "게시글을 찾을 수 없습니다.";
+        //         return;
+        //     }
 
-            postTitle.textContent = post.title;
-            postContent.textContent = post.content;
-            authorProfile.src = post.authorProfile || "../assets/userProfile.jpg";
-            authorName.textContent = post.author;
-            postDate.textContent = post.date;
-            postImage.src = post.image || "../assets/userProfile.jpg";
+        //     postTitle.textContent = post.title;
+        //     postContent.textContent = post.content;
+        //     authorProfile.src = post.authorProfile || "../assets/userProfile.jpg";
+        //     authorName.textContent = post.author;
+        //     postDate.textContent = post.date;
+        //     postImage.src = post.image || "../assets/userProfile.jpg";
 
-            likeCount.textContent = formatCount(post.likes);
-            viewCount.textContent = formatCount(post.views);
+        //     likeCount.textContent = formatCount(post.likes);
+        //     viewCount.textContent = formatCount(post.views);
+        //     commentCount.textContent = formatCount(post.comments.length);
+        //     comments = post.comments;
 
-            // 댓글이 배열로 온다고 가정 => commentCount 계산
-            // (명세서에 comments가 배열 형태)
-            commentCount.textContent = formatCount(post.comments.length);
-            comments = post.comments;
-
-            postBtnDisplay();
-            renderComments(post.comments);
-        } catch (error) {
-            console.error("데이터 로딩 오류:", error);
-            postTitle.textContent = error.message;
-        }
+        //     postBtnDisplay();
+        //     renderComments(post.comments);
+        // } catch (error) {
+        //     console.error("데이터 로딩 오류:", error);
+        //     postTitle.textContent = error.message;
+        // }
     }
 
     function formatCount(count) {
@@ -140,12 +139,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             likeBtn.classList.remove("active");
             likeBtn.style.backgroundColor = "#d9d9d9";
             likeCount.textContent = formatCount(count - 1);
-            deleteLike();
+            // deleteLike();
         } else {
             likeBtn.classList.add("active");
             likeBtn.style.backgroundColor = "#ACA0EB";
             likeCount.textContent = formatCount(count + 1);
-            postLike();
+            // postLike();
         }
     });
 
@@ -198,146 +197,146 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function postLike() {
-        try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            });
+    // async function postLike() {
+    //     try {
+    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //             }
+    //         });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message);
-            }
+    //         if (!response.ok) {
+    //             const errData = await response.json();
+    //             throw new Error(errData.message);
+    //         }
 
-            const result = await response.json();
-            likeCount.textContent = result.data.likes;
+    //         const result = await response.json();
+    //         likeCount.textContent = result.data.likes;
 
-        } catch (error) {
-            console.error("댓글 로딩 오류:", error);
-        }
-    }
+    //     } catch (error) {
+    //         console.error("댓글 로딩 오류:", error);
+    //     }
+    // }
 
-    async function deleteLike() {
-        try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            });
+    // async function deleteLike() {
+    //     try {
+    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
+    //             method: "DELETE",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //             }
+    //         });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message);
-            }
+    //         if (!response.ok) {
+    //             const errData = await response.json();
+    //             throw new Error(errData.message);
+    //         }
 
-            const result = await response.json();
-            likeCount.textContent = result.data.likes;
+    //         const result = await response.json();
+    //         likeCount.textContent = result.data.likes;
 
-        } catch (error) {
-            console.error("댓글 로딩 오류:", error);
-        }
-    }
+    //     } catch (error) {
+    //         console.error("댓글 로딩 오류:", error);
+    //     }
+    // }
 
-    async function fetchComments() {
-        try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            });
+    // async function fetchComments() {
+    //     try {
+    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //             }
+    //         });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message || "댓글 데이터를 불러오는 데 실패했습니다.");
-            }
+    //         if (!response.ok) {
+    //             const errData = await response.json();
+    //             throw new Error(errData.message || "댓글 데이터를 불러오는 데 실패했습니다.");
+    //         }
 
-            const result = await response.json();
-            comments = result.data || [];
-            renderComments();
-        } catch (error) {
-            console.error("댓글 로딩 오류:", error);
-        }
-    }
+    //         const result = await response.json();
+    //         comments = result.data || [];
+    //         renderComments();
+    //     } catch (error) {
+    //         console.error("댓글 로딩 오류:", error);
+    //     }
+    // }
 
-    async function postComment(newContent){
-        try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify({
-                    content: newContent
-                })
-            });
+    // async function postComment(newContent){
+    //     try {
+    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //             },
+    //             body: JSON.stringify({
+    //                 content: newContent
+    //             })
+    //         });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message);
-            }
+    //         if (!response.ok) {
+    //             const errData = await response.json();
+    //             throw new Error(errData.message);
+    //         }
 
-            await fetchComments();
-        } catch (error) {
-            console.error("댓글 작성 오류:", error);
-            alert(error.message);
-        }
-    }
+    //         await fetchComments();
+    //     } catch (error) {
+    //         console.error("댓글 작성 오류:", error);
+    //         alert(error.message);
+    //     }
+    // }
 
-    async function editComment(commentId, newContent) {
-        try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify({
-                    content: newContent
-                })
-            });
+    // async function editComment(commentId, newContent) {
+    //     try {
+    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
+    //             method: "PATCH",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //             },
+    //             body: JSON.stringify({
+    //                 content: newContent
+    //             })
+    //         });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message);
-            }
+    //         if (!response.ok) {
+    //             const errData = await response.json();
+    //             throw new Error(errData.message);
+    //         }
 
-            await fetchComments();
-        } catch (error) {
-            console.error("댓글 수정 오류:", error);
-            alert(error.message);
-        }
-    }
+    //         await fetchComments();
+    //     } catch (error) {
+    //         console.error("댓글 수정 오류:", error);
+    //         alert(error.message);
+    //     }
+    // }
 
-    async function deleteComment(commentId) {
-        try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                }
-            });
+    // async function deleteComment(commentId) {
+    //     try {
+    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
+    //             method: "DELETE",
+    //             headers: {
+    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //             }
+    //         });
 
-            if (!response.ok) {
-                const errData = await response.json();
-                throw new Error(errData.message);
-            }
+    //         if (!response.ok) {
+    //             const errData = await response.json();
+    //             throw new Error(errData.message);
+    //         }
 
-            await fetchComments();
-            alert("댓글이 삭제되었습니다.");
-        } catch (error) {
-            console.error("댓글 삭제 오류:", error);
-            alert(error.message);
-        }
-    }
+    //         await fetchComments();
+    //         alert("댓글이 삭제되었습니다.");
+    //     } catch (error) {
+    //         console.error("댓글 삭제 오류:", error);
+    //         alert(error.message);
+    //     }
+    // }
     
 
     function renderComments(comments) {
