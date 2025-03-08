@@ -1,4 +1,5 @@
 import CONFIG from "../config.js";
+import { validatePassword } from "../../utils/validate.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const passwordInput = document.getElementById("password");
@@ -12,12 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     let validatePasswordCheck = false;
-
-    // 비밀번호 유효성 검사
-    function validatePassword(password) {
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/;
-        return passwordPattern.test(password);
-    }
 
     passwordInput.addEventListener("input", () => {
         if (passwordInput.value === "") {

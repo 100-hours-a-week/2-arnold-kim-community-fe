@@ -1,4 +1,6 @@
 import CONFIG from "../config.js";
+import { validateEmail, validatePassword } from "../../utils/validate.js";
+
 
 document.addEventListener("DOMContentLoaded", async () => {
     const emailInput = document.getElementById("email");
@@ -23,18 +25,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
     // 까지
-
-    // 이메일 유효성 검사
-    function validateEmail(email) {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(email);
-    }
-
-    // 비밀번호 유효성 검사
-    function validatePassword(password) {
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/;
-        return passwordPattern.test(password);
-    }
 
     // 에러 메시지 출력
     function updateErrorMessage() {

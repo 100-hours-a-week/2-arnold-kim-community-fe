@@ -1,4 +1,5 @@
 import CONFIG from "../config.js";
+import { validateEmail, validatePassword } from "../../utils/validate.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const emailInput = document.getElementById("email");
@@ -17,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const profileUpload = document.getElementById("profile-upload")
     const profileImage = document.getElementById("profile-image")
 
-    let users = [];
+    // let users = [];
     let validatePasswordCheck = false;
     let validateUsername = false;
     let validateProfile = false;
@@ -29,27 +30,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (!response.ok) throw new Error("사용자 데이터를 불러오는데 실패했습니다.");
             const jsonData = await response.json();
             const localData = JSON.parse(localStorage.getItem("users")) || [];
-            users = [...jsonData, ...localData]; 
+            // users = [...jsonData, ...localData]; 
+            return [...jsonData, ...localData];
         } catch (error) {
             console.log(error);
+            return [];
         }
     }
     // 까지
 
-    // 이메일 유효성 검사
-    function validateEmail(email) {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailPattern.test(email);
-    }
-
-    // 비밀번호 유효성 검사
-    function validatePassword(password) {
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,20}$/;
-        return passwordPattern.test(password);
-    }
-
     // 에러 메시지 업데아트
-    emailInput.addEventListener("input", () => {
+    emailInput.addEventListener("input", async () => {
+        const users = await getUsers();
         const user = users.find(user => user.email === emailInput.value);
         const email = emailInput.value;
 
@@ -91,8 +83,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         updateButtonState();
     });
 
-    usernameInput.addEventListener("input", () => {
+    usernameInput.addEventListener("input", async () => {
         const username = usernameInput.value;
+        const users = await getUsers();
         const user = users.find(user => user.username === username);
 
         if (username === "") {
