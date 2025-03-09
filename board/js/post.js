@@ -123,8 +123,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         //     postBtnDisplay();
         //     renderComments(post.comments);
         // } catch (error) {
-        //     console.error("데이터 로딩 오류:", error);
-        //     postTitle.textContent = error.message;
+        //     console.error("게시글 로딩 오류:", error);
+        //     alert(error.message)
         // }
     }
 
@@ -216,7 +216,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     //         likeCount.textContent = result.data.likes;
 
     //     } catch (error) {
-    //         console.error("댓글 로딩 오류:", error);
+    //         console.error("좋아요 오류:", error);
+    //         alert(error.message)
     //     }
     // }
 
@@ -239,7 +240,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     //         likeCount.textContent = result.data.likes;
 
     //     } catch (error) {
-    //         console.error("댓글 로딩 오류:", error);
+    //         console.error("좋아요 오류:", error);
+    //         alert(error.message)
     //     }
     // }
 
@@ -263,6 +265,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //         renderComments();
     //     } catch (error) {
     //         console.error("댓글 로딩 오류:", error);
+    //         alert(error.message)
     //     }
     // }
 
