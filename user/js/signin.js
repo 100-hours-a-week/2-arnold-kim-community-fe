@@ -18,30 +18,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     const profileUpload = document.getElementById("profile-upload")
     const profileImage = document.getElementById("profile-image")
 
-    // let users = [];
+    let users = [];
     let validatePasswordCheck = false;
     let validateUsername = false;
     let validateProfile = false;
 
-    // fetchAPI 적용시 필요 없는 코드
-    async function getUsers() {
+    async function getUsers(){
         try {
-            const response = await fetch("../data/user.json");
-            if (!response.ok) throw new Error("사용자 데이터를 불러오는데 실패했습니다.");
-            const jsonData = await response.json();
-            const localData = JSON.parse(localStorage.getItem("users")) || [];
-            // users = [...jsonData, ...localData]; 
-            return [...jsonData, ...localData];
+            const response = await fetch(`${CONFIG.API_BASE_URL}/users`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+
+            const result = await response.json();
+            users = result.data;
+
         } catch (error) {
-            console.log(error);
-            return [];
+            alert("회원 정보 불러오기 오류");
         }
     }
-    // 까지
 
     // 에러 메시지 업데아트
     emailInput.addEventListener("input", async () => {
-        const users = await getUsers();
         const user = users.find(user => user.email === emailInput.value);
         const email = emailInput.value;
 
@@ -50,7 +55,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else if (email.length < 5 || !validateEmail(email)) {
             emailError.textContent = "*올바른 이메일 주소 형식을 입력해주세요.";
         } else if (user){
-            // fetchAPI 적용시 필요 없는 코드
             emailError.textContent = "*중복된 이메일입니다.";
         } else {
             emailError.textContent = "";
@@ -85,7 +89,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     usernameInput.addEventListener("input", async () => {
         const username = usernameInput.value;
-        const users = await getUsers();
         const user = users.find(user => user.username === username);
 
         if (username === "") {
@@ -95,7 +98,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else if (username.includes(" ")) {
             usernameError.textContent = "*띄어쓰기를 없애주세요";
         } else if (user) {
-            // fetchAPI 적용시 필요 없는 코드
             usernameError.textContent = "*중복된 닉네임 입니다.";
         }
         else {
@@ -114,58 +116,35 @@ document.addEventListener("DOMContentLoaded", async () => {
             signinBtn.classList.remove("active");
             signinBtn.setAttribute("disabled", "true");
         }
-    };
+    }
 
-    // 프로필 이미지 업로드
-    profileUpload.addEventListener("change", async (e) => {
-        const file = e.target.files[0];
-        profileImageError.textContent = "*프로필 사진을 추가해주세요."
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                profileImage.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            validateProfile = true;
-            profileImageError.textContent = ""
-        } else {
+    // fetchAPI를 이용항 프로필 이미지 업로드
+    profileUpload.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const file = profileImage.files[0];
+        if (!file){
             profileImage.src = "../assets/default_img.png"; // 기본 이미지로 변경
             profileImageError.textContent = "*프로필 사진을 추가해주세요."
             validateProfile = false;
         }
 
-        updateButtonState();
+        const formData = new formData();
+        formData.append("image", file);
+
+        try{
+            const response = await fetch("${CONFIG.API_BASE_URL}/users/image", {
+                method: "POST",
+                body: formData
+            });
+
+        } catch (error){
+            console.error("이미지 업로드 에러 ", error);
+            profileImageError.textContent = "*이미지 업로드 중 알 수 없는 에러가 발생했습니다."
+        }
     });
 
-    // fetchAPI를 이용항 프로필 이미지 업로드
-    // profileUpload.addEventListener("click", async (e) => {
-    //     e.preventDefault();
-    //     const file = profileImage.files[0];
-    //     if (!file){
-    //         profileImage.src = "../assets/default_img.png"; // 기본 이미지로 변경
-    //         profileImageError.textContent = "*프로필 사진을 추가해주세요."
-    //         validateProfile = false;
-    //     }
-
-    //     const formData = new formData();
-    //     formData.append("image", file);
-
-    //     try{
-    //         const response = await fetch("${CONFIG.API_BASE_URL}/users/image", {
-    //             method: "POST",
-    //             body: formData
-    //         });
-
-    //     } catch (error){
-    //         console.error("이미지 업로드 에러 ", error);
-    //         profileImageError.textContent = "*이미지 업로드 중 알 수 없는 에러가 발생했습니다."
-    //     }
-    // });
-
     // 회원가입 버튼 클릭 이벤트
-    //signinBtn.addEventListener("click", async (e) => {
-    signinBtn.addEventListener("click", (e) => {
+    signinBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         
         const newUser = {
@@ -177,28 +156,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         };
 
         // fetch API를 이용하여 로그인 확인
-        // try {
-        //     const response = await fetch("${CONFIG.API_BASE_URL}/users/signup", {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //         },
-        //         // 리소스를 body에 담아서 전송
-        //         body: JSON.stringify(newUser)
-        //     });
+        try {
+            const response = await fetch("${CONFIG.API_BASE_URL}/users/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                // 리소스를 body에 담아서 전송
+                body: JSON.stringify(newUser)
+            });
             
-        //     if (response.ok) {
-        //         window.location.href = "login.html";
-        //     } else {
-        //         const errorData = await response.json();
-        //         emailError.textContent = errorData.error.email;
-        //         usernameError.textContent = errorData.error.username;
-        //         loginFailError.textContent = `*아이디 또는 비밀번호를 확인해주세요`;
-        //         console.log("${errorData.message}");
-        //     }
-        // } catch (error) {
-        //     console.error("로그인 요청 실패:", error);
-        // }
+            if (response.ok) {
+                window.location.href = "login.html";
+            } else {
+                const errorData = await response.json();
+                emailError.textContent = errorData.error.email;
+                usernameError.textContent = errorData.error.username;
+                console.log("${errorData.message}");
+            }
+        } catch (error) {
+            console.error("로그인 요청 실패:", error);
+        }
     });
 
     // 로그인하러 가기로 이동
