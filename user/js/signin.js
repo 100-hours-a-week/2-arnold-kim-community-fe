@@ -1,4 +1,4 @@
-import CONFIG from "../config.js";
+import CONFIG from "../../config.js";
 import { validateEmail, validatePassword } from "../../utils/validate.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     async function getUsers(){
         try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/users`, {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/users/info`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const result = await response.json();
             users = result.data;
+            console.log()
 
         } catch (error) {
             alert("회원 정보 불러오기 오류");
@@ -119,51 +120,56 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // fetchAPI를 이용항 프로필 이미지 업로드
-    profileUpload.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const file = profileImage.files[0];
-        if (!file){
-            profileImage.src = "../assets/default_img.png"; // 기본 이미지로 변경
+
+    profileUpload.addEventListener('change', (e) => {
+        const file = profileUpload.files[0];
+        profileImageError.textContent = "*프로필 사진을 추가해주세요."
+
+        if (file){
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                profileImage.src = ev.target.result;
+                validateProfile = true;
+                profileImageError.textContent = "";
+            };
+            reader.readAsDataURL(file);
+            
+        } else {
+            profileImage.src = "../assets/default_img.png";
             profileImageError.textContent = "*프로필 사진을 추가해주세요."
             validateProfile = false;
         }
 
-        const formData = new formData();
-        formData.append("image", file);
-
-        try{
-            const response = await fetch("${CONFIG.API_BASE_URL}/users/image", {
-                method: "POST",
-                body: formData
-            });
-
-        } catch (error){
-            console.error("이미지 업로드 에러 ", error);
-            profileImageError.textContent = "*이미지 업로드 중 알 수 없는 에러가 발생했습니다."
-        }
+        updateButtonState();
     });
 
     // 회원가입 버튼 클릭 이벤트
     signinBtn.addEventListener("click", async (e) => {
         e.preventDefault();
-        
+
+        const file = profileUpload.files[0];
         const newUser = {
             email: emailInput.value,
             password: passwordInput.value,
             passwordCheck: passwordCheckInput.value,
             username: usernameInput.value,
-            profileImage: profileImage.src
         };
+
+        const formData = new FormData();
+        const userJson = new Blob(
+            [JSON.stringify(newUser)],
+            { type: "application/json" }
+        )
+
+        formData.append("file", file);
+        formData.append("userRequestDTO", userJson);
 
         // fetch API를 이용하여 로그인 확인
         try {
-            const response = await fetch("${CONFIG.API_BASE_URL}/users/signup", {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/users/signup`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
                 // 리소스를 body에 담아서 전송
-                body: JSON.stringify(newUser)
+                body: formData
             });
             
             if (response.ok) {
@@ -175,7 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 console.log("${errorData.message}");
             }
         } catch (error) {
-            console.error("로그인 요청 실패:", error);
+            console.error("회원가입 요청 실패:", error);
         }
     });
 
