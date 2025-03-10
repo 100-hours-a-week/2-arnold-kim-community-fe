@@ -1,4 +1,4 @@
-import CONFIG from "../config.js";
+import CONFIG from "../../config.js";
 import { validatePassword } from "../../utils/validate.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             //         method: "PATCH", 
             //         headers: {
             //             "Content-Type": "application/json",
-            //             "Authorization": `Bearer ${localStorage.getItem("token")}` // 토큰이 필요하다면 추가
+            //             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             //         },
             //         body: JSON.stringify({
             //             password: passwordInput.value

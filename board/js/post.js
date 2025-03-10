@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //         const response = await fetch("${CONFIG.API_BASE_URL/users/info}", {
     //             method: "GET",
     //             headers: {
-    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     //             }
     //         });
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         //         method: "GET",
         //         headers: {
         //             "Content-Type": "application/json",
-        //             "Authorization": `Bearer ${localStorage.getItem("token")}`
+        //             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         //         }
         //     });
 
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             //     const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}`, {
             //         method: "DELETE",
             //         headers: {
-            //             "Authorization": `Bearer ${localStorage.getItem("token")}`
+            //             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             //         }
             //     });
 
@@ -203,7 +203,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //             method: "POST",
     //             headers: {
     //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     //             }
     //         });
 
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //             method: "DELETE",
     //             headers: {
     //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     //             }
     //         });
 
@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //             method: "GET",
     //             headers: {
     //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     //             }
     //         });
 
@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //             method: "POST",
     //             headers: {
     //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     //             },
     //             body: JSON.stringify({
     //                 content: newContent
@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //             method: "PATCH",
     //             headers: {
     //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     //             },
     //             body: JSON.stringify({
     //                 content: newContent
@@ -324,7 +324,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
     //             method: "DELETE",
     //             headers: {
-    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`
+    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     //             }
     //         });
 

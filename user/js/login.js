@@ -65,17 +65,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         
         const email = emailInput.value;
         const password = passwordInput.value;
-
-        // // fetchAPI 적용시 필요 없는 코드
-        // const user = users.find(user => user.email === email && user.password === password);
-
-        // if (user) {
-        //     window.location.href = "../board/posts.html";
-        //     sessionStorage.setItem("user", JSON.stringify(user));
-        // } else {
-        //     loginFailError.textContent = "*아이디 또는 비밀번호를 확인해주세요"
-        // }
-        // // 까지
         
         // fetch API를 이용하여 로그인 확인
         try {
@@ -91,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (response.ok) {
                 const data = await response.json();
                 // 성공 시 받은 토큰을 localStorage에 저장
-                localStorage.setItem("token", data.accessToken);
+                localStorage.setItem("accessToken", data.data.accessToken);
                 window.location.href = "../board/posts.html";
             } else {
                 const errorData = await response.json();

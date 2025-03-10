@@ -1,3 +1,5 @@
+import CONFIG from "../../config.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
     const userProfile = document.getElementById("user-profile");
     const profileDropdown = document.createElement("div");
@@ -10,51 +12,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     const profileUpload = document.getElementById("profile-upload");
     const editCompleteBtn = document.getElementById("edit-profile-complete-btn");
 
-    let users = [];
     let user;
 
     async function getUser() {
-        try {
-            const response = await fetch("../data/user.json");
-            if (!response.ok) throw new Error("유저 데이터를 불러오는 데 실패했습니다.");
-            users = await response.json();
-        } catch (error) {
-            console.error("유저 데이터 로딩 오류:", error);
-        }
-
         // fetch API를 이용하여 유저 정보 가져오기
-        // try {
-        //     const response = await fetch("${CONFIG.API_BASE_URL/users/info}", {
-        //         method: "GET",
-        //         headers: {
-        //             "Authorization": `Bearer ${localStorage.getItem("token")}`
-        //         }
-        //     });
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/users/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
 
-        //     if (response.ok) {
-        //         const data = await response.json();
-
-        //         user = data;
-        //     }
-        // } catch (error) {
-        //     alert(error);
-        // }
-
-    }
-
-    function getLoggedInUser() {
-        return JSON.parse(localStorage.getItem("user")) || null;
-    }
-
-    function displayUserEmail() {
-        const loggedInUser = getLoggedInUser();
-        if (loggedInUser && loggedInUser.email) {
-            userEmail.textContent = loggedInUser.email; 
-        } else {
+            if (response.ok) {
+                const data = await response.json();
+                user = data.data;
+                userEmail.textContent = user.email;
+                profileImage.src = `${CONFIG.API_BASE_URL}/images/` + user.filePath;
+                console.log(profileImage.src)
+            }
+        } catch (error) {
+            alert(error);
             userEmail.textContent = "로그인된 계정이 없습니다.";
         }
 
-        // userEmail.textContent = user.email;
     }
 
     profileDropdown.classList.add("profile-dropdown");
@@ -121,7 +102,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             //         method: "PATCH",
             //         headers: {
             //             "Content-Type": "application/json",
-            //             "Authorization": `Bear ${localStorage.getItem("token")}`
+            //             "Authorization": `Bear ${localStorage.getItem("accessToken")}`
             //         },
             //         body: JSON.stringify({
             //             username: usernameInput.value
@@ -197,7 +178,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             //     const response = await fetch(`${CONFIG.API_BASE_URL}/users`, {
             //         method: "DELETE",
             //         headers: {
-            //             "Authorization": `Bearer ${localStorage.getItem("token")}`
+            //             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             //         }
             //     });
 
@@ -206,7 +187,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             //         throw new Error(resBody.message);
             //     }
 
-            //     localStorage.removeItem("token");
+            //     localStorage.removeItem("accessToken");
             //     window.location.href = "login.html";
 
             // } catch (error) {
@@ -217,5 +198,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     await getUser(); 
-    displayUserEmail();
+    // displayUserEmail();
 });
