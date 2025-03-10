@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (response.ok) {
                 const data = await response.json();
                 // 성공 시 받은 토큰을 localStorage에 저장
-                localStorage.setItem("token", data.token);
+                localStorage.setItem("token", data.accessToken);
                 window.location.href = "../board/posts.html";
             } else {
                 const errorData = await response.json();
