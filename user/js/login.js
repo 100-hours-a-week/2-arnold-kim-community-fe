@@ -60,48 +60,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     passwordInput.addEventListener("input", updateErrorMessage);
 
     // 로그인 버튼 클릭 이벤트
-    //loginBtn.addEventListener("click", async (e) => {
-    loginBtn.addEventListener("click", (e) => {
+    loginBtn.addEventListener("click", async (e) => {
         e.preventDefault();
         
         const email = emailInput.value;
         const password = passwordInput.value;
 
-        // fetchAPI 적용시 필요 없는 코드
-        const user = users.find(user => user.email === email && user.password === password);
+        // // fetchAPI 적용시 필요 없는 코드
+        // const user = users.find(user => user.email === email && user.password === password);
 
-        if (user) {
-            window.location.href = "../board/posts.html";
-            sessionStorage.setItem("user", JSON.stringify(user));
-        } else {
-            loginFailError.textContent = "*아이디 또는 비밀번호를 확인해주세요"
-        }
-        // 까지
+        // if (user) {
+        //     window.location.href = "../board/posts.html";
+        //     sessionStorage.setItem("user", JSON.stringify(user));
+        // } else {
+        //     loginFailError.textContent = "*아이디 또는 비밀번호를 확인해주세요"
+        // }
+        // // 까지
         
         // fetch API를 이용하여 로그인 확인
-        // try {
-        //     const response = await fetch("${CONFIG.API_BASE_URL}/users/login", {
-        //         method: "GET",
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //         },
-        //         // 리소스를 body에 담아서 전송
-        //         body: JSON.stringify({ email, password })
-        //     });
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                // 리소스를 body에 담아서 전송
+                body: JSON.stringify({ email, password })
+            });
             
-        //     if (response.ok) {
-        //         const data = await response.json();
-        //         // 성공 시 받은 토큰을 localStorage에 저장
-        //         localStorage.setItem("token", data.token);
-        //         window.location.href = "../board/posts.html";
-        //     } else {
-        //         const errorData = await response.json();
-        //         loginFailError.textContent = `*아이디 또는 비밀번호를 확인해주세요`;
-        //         console.log("${errorData.message}");
-        //     }
-        // } catch (error) {
-        //     console.error("로그인 요청 실패:", error);
-        // }
+            if (response.ok) {
+                const data = await response.json();
+                // 성공 시 받은 토큰을 localStorage에 저장
+                localStorage.setItem("token", data.token);
+                window.location.href = "../board/posts.html";
+            } else {
+                const errorData = await response.json();
+                loginFailError.textContent = `*아이디 또는 비밀번호를 확인해주세요`;
+                console.log("${errorData.message}");
+            }
+        } catch (error) {
+            console.error("로그인 요청 실패:", error);
+        }
     });
 
     // 회원가입 버튼 클릭 시 이동
