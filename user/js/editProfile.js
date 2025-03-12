@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const editCompleteBtn = document.getElementById("edit-profile-complete-btn");
 
     let user;
+    let file;
 
     async function getUser() {
         // fetch API를 이용하여 유저 정보 가져오기
@@ -93,6 +94,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             usernameError.textContent = "*닉네임을 입력해주세요.";
         } else if (username.length > 10) {
             usernameError.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
+        } else if (username == user.username){
+            usernameError.textContent = "*현재 사용중인 닉네임으로는 변경할 수 없습니다."
         } else {
             usernameError.textContent = ""; 
         }
@@ -126,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // });
     
     profileUpload.addEventListener("change", function (event) {
-        const file = event.target.files[0];
+        file = event.target.files[0];
 
         if (file) {
             const reader = new FileReader();
@@ -139,38 +142,49 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     editProfileBtn.addEventListener("click", async () => {
         const username = usernameInput.value;
+
+        const editUser = {
+            username : username
+        }
+        const formData = new FormData();
+        const userJson = new Blob(
+            [JSON.stringify(editUser)],
+            { type: "application/json" }
+        )
+
+        formData.append("file", file);
+        formData.append("userRequestDTO", userJson);
+
         // fetchAPI를 이용한 닉네임 변경 요청
         try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/users/username`, {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/users/`, {
                 method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 },
-                body: JSON.stringify({
-                    username: usernameInput.value
-                })
+                body: formData
             });
 
             if (response.ok) {
                 updateButtonState();
+
+                if (usernameError.textContent === "") {
+                    editCompleteBtn.style.display = "block"; 
+                    setTimeout(() => {
+                        editCompleteBtn.style.display = "none";
+                    }, 2000);
+                }
             } else {
                 const errorData = await response.json();
-                usernameError.textContent = errorData.errorDetails.usernameError;
+                usernameError.textContent = errorData.error;
                 console.log(`${JSON.stringify(errorData)}`);
             }
-            
         } catch (error) {
             usernameError.textContent = `${error.message}`;
             updateButtonState();
         } 
 
-        if (usernameError.textContent === "") {
-            editCompleteBtn.style.display = "block"; 
-            setTimeout(() => {
-                editCompleteBtn.style.display = "none";
-            }, 2000);
-        }
+        
     });
 
     deleteAccountBtn.addEventListener("click", () => {

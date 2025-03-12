@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const result = await response.json();
             users = result.data;
-            console.log()
+            console.log(users);
 
         } catch (error) {
             alert("회원 정보 불러오기 오류");
