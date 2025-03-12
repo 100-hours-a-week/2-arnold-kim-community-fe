@@ -1,9 +1,6 @@
 import CONFIG from "../../config.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const backToPosts = document.getElementById("back");
-    const userProfile = document.getElementById("user-profile");
-
     const postTitle = document.getElementById("post-title");
     const postContent = document.getElementById("post-content");
     const postImage = document.getElementById("post-image");
@@ -13,15 +10,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get("id");
-
-
-    userProfile.addEventListener("click", () => {
-        window.location.href = "editProfile.html";
-    });
-
-    backToPosts.addEventListener("click", () => {
-        window.location.href = `post.html?id=${postId}`;
-    });
 
     async function fetchPost() {
         try {

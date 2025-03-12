@@ -1,9 +1,6 @@
 import CONFIG from "../../config.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const backToPosts = document.getElementById("back");
-    const userProfile = document.getElementById("user-profile");
-
     const postTitle = document.getElementById("post-title");
     const postContent = document.getElementById("post-content");
     const postImage = document.getElementById("post-image");
@@ -11,14 +8,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const saveMakeBtn = document.getElementById("save-make");
     const errorMessage = document.getElementById("error-message");
-
-    userProfile.addEventListener("click", () => {
-        window.location.href = "makeProfile.html";
-    });
-
-    backToPosts.addEventListener("click", () => {
-        window.location.href = "posts.html";
-    });
 
     postTitle.addEventListener("input", () => {
         if (postTitle.value.length > 26) {

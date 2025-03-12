@@ -37,10 +37,20 @@ body {
     cursor: pointer;
 }
 
+#back {
+    font-size: 32px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    left: 20px;
+}
+
 main {
     width: 50%;
     margin-top: 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
+}

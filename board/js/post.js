@@ -18,9 +18,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const editPostBtn = document.getElementById("edit-post");
     const deletePostBtn = document.getElementById("delete-post");
 
-    const backToPosts = document.getElementById("back");
-    const userProfile = document.getElementById("user-profile");
-
     const commentInput = document.getElementById("comment-input");
     const commentSubmit = document.getElementById("comment-submit");
 
@@ -46,15 +43,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     //     }
 
     // }
-
-
-    userProfile.addEventListener("click", () => {
-        window.location.href = "editProfile.html";
-    });
-
-    backToPosts.addEventListener("click", () => {
-        window.location.href = "posts.html";
-    });
 
     async function fetchPost() {
         try {

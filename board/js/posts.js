@@ -1,20 +1,39 @@
+import CONFIG from "../../config.js";
+
 document.addEventListener("DOMContentLoaded", async () => {
     const postList = document.getElementById("post-list");
-    const userProfile = document.getElementById("user-profile");
     const makePostBtn = document.getElementById("make-post-btn");
     const postListContainer = document.getElementById("post-list-container"); 
     let posts = [];
     let currentPage = 1;
     const postsPerPage = 5;
-    let isFetching = false; 
-
-    userProfile.addEventListener("click", () => {
-        window.location.href = "../user/editProfile.html";
-    });
+    let isFetching = false;
 
     makePostBtn.addEventListener("click", () => {
         window.location.href = "makePost.html";
     });
+
+    // async function getUser() {
+    //     // fetch API를 이용하여 유저 정보 가져오기
+    //     try {
+    //         const response = await fetch(`${CONFIG.API_BASE_URL}/users/`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+    //             }
+    //         });
+
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             const user = data.data;
+    //             localStorage.setItem("profileImgUrl", `${CONFIG.API_BASE_URL}/images/` + user.filePath)
+    //             console.log(user)
+    //         }
+    //     } catch (error) {
+    //         alert(error);
+    //     }
+
+    // }
 
     async function fetchPosts() {
         try {
@@ -109,4 +128,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     postListContainer.addEventListener("scroll", handleScroll);
 
     await fetchPosts();
+    await getUser();
 });

@@ -15,6 +15,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     let user;
     let file;
 
+    const storedUrl = localStorage.getItem("profileImgUrl");
+    if (storedUrl) {
+        userProfile.src = storedUrl;
+    }
+
     async function getUser() {
         // fetch API를 이용하여 유저 정보 가져오기
         try {
@@ -74,6 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("logout-menu").addEventListener("click", () => {
         window.location.href = "login.html";
+        localStorage.clear();
     });
 
     function updateButtonState() {

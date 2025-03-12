@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const data = await response.json();
                 // 성공 시 받은 토큰을 localStorage에 저장
                 localStorage.setItem("accessToken", data.data.accessToken);
+                await getUser();
                 window.location.href = "../board/posts.html";
             } else {
                 const errorData = await response.json();
@@ -96,6 +97,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     signupBtn.addEventListener("click", () => {
         window.location.href = "signin.html";
     });
+
+    async function getUser() {
+        // fetch API를 이용하여 유저 정보 가져오기
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/users/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const user = data.data;
+                localStorage.setItem("profileImgUrl", `${CONFIG.API_BASE_URL}/images/` + user.filePath)
+                console.log(user)
+            }
+        } catch (error) {
+            alert(error);
+        }
+
+    }
 
     await getUsers();
 });
