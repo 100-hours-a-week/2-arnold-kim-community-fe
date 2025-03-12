@@ -11,14 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const passwordError = document.getElementById("password-error")
     const passwordCheckError = document.getElementById("password-check-error")
 
-    const userProfile = document.getElementById("user-profile");
-
     let validatePasswordCheck = false;    
-
-    const storedUrl = localStorage.getItem("profileImgUrl");
-    if (storedUrl) {
-        userProfile.src = storedUrl;
-    }
 
     passwordInput.addEventListener("input", () => {
         if (passwordInput.value === "") {

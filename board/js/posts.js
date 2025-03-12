@@ -13,28 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         window.location.href = "makePost.html";
     });
 
-    // async function getUser() {
-    //     // fetch API를 이용하여 유저 정보 가져오기
-    //     try {
-    //         const response = await fetch(`${CONFIG.API_BASE_URL}/users/`, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-    //             }
-    //         });
-
-    //         if (response.ok) {
-    //             const data = await response.json();
-    //             const user = data.data;
-    //             localStorage.setItem("profileImgUrl", `${CONFIG.API_BASE_URL}/images/` + user.filePath)
-    //             console.log(user)
-    //         }
-    //     } catch (error) {
-    //         alert(error);
-    //     }
-
-    // }
-
     async function fetchPosts() {
         try {
             const response = await fetch("../data/posts.json");
@@ -128,5 +106,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     postListContainer.addEventListener("scroll", handleScroll);
 
     await fetchPosts();
-    await getUser();
 });

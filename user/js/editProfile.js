@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // 기존 닉네임 변경 코드
+    // 닉네임 변경 코드
     usernameInput.addEventListener("input", async () => {
         const username = usernameInput.value.trim();
 
@@ -108,31 +108,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         updateButtonState();
     });
-
-    // fetchAPI를 이용항 프로필 이미지 업로드
-    // profileUpload.addEventListener("click", async (e) => {
-    //     e.preventDefault();
-    //     const file = profileImage.files[0];
-    //     if (!file){
-    //         profileImage.src = "../assets/default_img.png"; // 기본 이미지로 변경
-    //         profileImageError.textContent = "*프로필 사진을 추가해주세요."
-    //         validateProfile = false;
-    //     }
-
-    //     const formData = new formData();
-    //     formData.append("image", file);
-
-    //     try{
-    //         const response = await fetch("${CONFIG.API_BASE_URL}/users/image", {
-    //             method: "POST",
-    //             body: formData
-    //         });
-
-    //     } catch (error){
-    //         console.error("이미지 업로드 에러 ", error);
-    //         profileImageError.textContent = "*이미지 업로드 중 알 수 없는 에러가 발생했습니다."
-    //     }
-    // });
     
     profileUpload.addEventListener("change", function (event) {
         file = event.target.files[0];
@@ -161,7 +136,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         formData.append("file", file);
         formData.append("userRequestDTO", userJson);
 
-        // fetchAPI를 이용한 닉네임 변경 요청
+        // fetchAPI를 이용한 닉네임 및 이미지 변경 요청
         try {
             const response = await fetch(`${CONFIG.API_BASE_URL}/users/`, {
                 method: "PATCH",
@@ -188,37 +163,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (error) {
             usernameError.textContent = `${error.message}`;
             updateButtonState();
-        } 
-
-        
+        }
     });
 
     deleteAccountBtn.addEventListener("click", () => {
         setModal("<h3>회원탈퇴 하시겠습니까?</h3><br>작성된 게시글과 댓글은 삭제됩니다.", async () => {
             // fetch API를 이용한 회원 탈퇴
-            // try {
-            //     const response = await fetch(`${CONFIG.API_BASE_URL}/users`, {
-            //         method: "DELETE",
-            //         headers: {
-            //             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-            //         }
-            //     });
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/users/`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                    }
+                });
 
-            //     if (!response.ok) {
-            //         const resBody = await response.json();
-            //         throw new Error(resBody.message);
-            //     }
+                if (!response.ok) {
+                    const resBody = await response.json();
+                    throw new Error(resBody.message);
+                }
 
-            //     localStorage.removeItem("accessToken");
-            //     window.location.href = "login.html";
+                localStorage.clear();
+                window.location.href = "login.html";
 
-            // } catch (error) {
-            //     console.error(error);
-            //     alert(error.message);
-            // }
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
         });
     });
 
     await getUser(); 
-    // displayUserEmail();
 });
