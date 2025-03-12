@@ -57,25 +57,25 @@ document.addEventListener("DOMContentLoaded", async () => {
             editCompleteBtn.style.display = "block"; // 토스트 메시지 표시
     
             // fetch API를 이용하여 비밀번호 변경
-            // try {
-            //     const response = await fetch(`${CONFIG.API_BASE_URL}/users/password`, {
-            //         method: "PATCH", 
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-            //         },
-            //         body: JSON.stringify({
-            //             password: passwordInput.value
-            //         })
-            //     });
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/users/password`, {
+                    method: "PATCH", 
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                    },
+                    body: JSON.stringify({
+                        password: passwordInput.value
+                    })
+                });
 
-            //     setTimeout(() => {
-            //         editCompleteBtn.style.display = "none";
-            //     }, 2000);
+                setTimeout(() => {
+                    editCompleteBtn.style.display = "none";
+                }, 2000);
 
-            // } catch (error) {
-            //     alert(`오류 발생: ${error.message}`);
-            // }
+            } catch (error) {
+                alert(`오류 발생: ${error.message}`);
+            }
         }
     });
 });

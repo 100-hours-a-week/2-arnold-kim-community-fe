@@ -85,11 +85,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 window.location.href = "../board/posts.html";
             } else {
                 const errorData = await response.json();
-                loginFailError.textContent = `*아이디 또는 비밀번호를 확인해주세요`;
-                console.log("${errorData.message}");
+                loginFailError.textContent = errorData.message;
+                console.log(errorData.message);
             }
         } catch (error) {
             console.error("로그인 요청 실패:", error);
+            loginFailError.textContent = "*아이디 또는 비밀번호를 확인해주세요"
         }
     });
 
