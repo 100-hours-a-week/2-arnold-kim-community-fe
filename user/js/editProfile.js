@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 user = data.data;
                 userEmail.textContent = user.email;
                 profileImage.src = `${CONFIG.API_BASE_URL}/images/` + user.filePath;
-                console.log(profileImage.src)
+                console.log(user)
             }
         } catch (error) {
             alert(error);
@@ -95,31 +95,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             usernameError.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
         } else {
             usernameError.textContent = ""; 
-
-            // fetchAPI를 이용한 닉네임 변경 요청
-            // try {
-            //     const response = await fetch("${CONFIG.API_BASE_URL/users/username", {
-            //         method: "PATCH",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //             "Authorization": `Bear ${localStorage.getItem("accessToken")}`
-            //         },
-            //         body: JSON.stringify({
-            //             username: usernameInput.value
-            //         })
-            //     });
-    
-            //     if (response.ok) {
-            //         updateButtonState();
-            //     } else {
-            //         const result = await response.json();
-            //         usernameError.textContent = result.message;
-            //     }
-                
-            // } catch (error) {
-            //     usernameError.textContent = "${error.message}";
-            //     updateButtonState();
-            // } 
         }
 
         updateButtonState();
@@ -162,7 +137,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    editProfileBtn.addEventListener("click", () => {
+    editProfileBtn.addEventListener("click", async () => {
+        const username = usernameInput.value;
+        // fetchAPI를 이용한 닉네임 변경 요청
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/users/username`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                },
+                body: JSON.stringify({
+                    username: usernameInput.value
+                })
+            });
+
+            if (response.ok) {
+                updateButtonState();
+            } else {
+                const errorData = await response.json();
+                usernameError.textContent = errorData.errorDetails.usernameError;
+                console.log(`${JSON.stringify(errorData)}`);
+            }
+            
+        } catch (error) {
+            usernameError.textContent = `${error.message}`;
+            updateButtonState();
+        } 
+
         if (usernameError.textContent === "") {
             editCompleteBtn.style.display = "block"; 
             setTimeout(() => {
