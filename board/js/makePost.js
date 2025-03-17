@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const saveMakeBtn = document.getElementById("save-make");
     const errorMessage = document.getElementById("error-message");
 
+    let file;
+
     postTitle.addEventListener("input", () => {
         if (postTitle.value.length > 26) {
             alert("제목은 최대 26자까지만 입력 가능합니다.");
@@ -19,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     postImageUpload.addEventListener("change", (event) => {
-        const file = event.target.files[0];
+        file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -51,43 +53,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         errorMessage.style.display = "none";
 
-        // DB가 없어서 따로 저장하진 않고 alert만 함.
-        alert("게시글이 작성되었습니다.");
-        window.location.href = "posts.html";
-
         // fetch API를 이용한 게시글 등록
-        // try {
-        //     const response = await fetch(`${CONFIG.API_BASE_URL}/posts`, {
-        //         method: "POST",
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-        //         },
-        //         body: JSON.stringify({
-        //             title: postTitle.value.trim(),
-        //             content: postContent.value.trim(),
-        //             image: postImage.src 
-        //         })
-        //     });
+        const newPost = {
+            title: postTitle.value,
+            content: postContent.value
+        };
 
-        //     if (!response.ok) {
-        //         const resData = await response.json();
-        //         throw new Error(resData.message);
-        //     }
+        const formData = new FormData();
+        const postJson = new Blob(
+            [JSON.stringify(newPost)],
+            { type: "application/json" }
+        )
 
-        //     const result = await response.json();
-        //     if (result.message === "post_success") {
-        //         window.location.href = "posts.html";
-        //     } else {
-        //         throw new Error(result.message);
-        //     }
 
-        // } catch (error) {
-        //     console.error("게시글 등록 오류:", error);
-        //     errorMessage.textContent = error.message;
-        //     errorMessage.style.display = "block";
-        // }
+        formData.append("image", file);
+        formData.append("postRequestDTO", postJson);
+
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                window.location.href = "posts.html";
+            } else {
+                const result = await response.json();
+                console.log(result.message);
+                throw new Error(result.message);
+            }
+
+        } catch (error) {
+            console.error("게시글 등록 오류:", error);
+            errorMessage.textContent = error.message;
+            errorMessage.style.display = "block";
+        }
     });
-
-    await fetchPost();
 })
