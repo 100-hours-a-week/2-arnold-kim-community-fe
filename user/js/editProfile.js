@@ -12,36 +12,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     const profileUpload = document.getElementById("profile-upload");
     const editCompleteBtn = document.getElementById("edit-profile-complete-btn");
 
-    let user;
+    // let user;
     let file;
+
+    userEmail.textContent = localStorage.getItem("currentUserEmail");
+    const currentUsername = localStorage.getItem("currentUsername");
 
     const storedUrl = localStorage.getItem("profileImgUrl");
     if (storedUrl) {
         userProfile.src = storedUrl;
-    }
-
-    async function getUser() {
-        // fetch API를 이용하여 유저 정보 가져오기
-        try {
-            const response = await fetch(`${CONFIG.API_BASE_URL}/users/`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                user = data.data;
-                userEmail.textContent = user.email;
-                profileImage.src = `${CONFIG.API_BASE_URL}/images/` + user.filePath;
-                console.log(user)
-            }
-        } catch (error) {
-            alert(error);
-            userEmail.textContent = "로그인된 계정이 없습니다.";
-        }
-
+        profileImage.src = storedUrl
     }
 
     profileDropdown.classList.add("profile-dropdown");
@@ -100,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             usernameError.textContent = "*닉네임을 입력해주세요.";
         } else if (username.length > 10) {
             usernameError.textContent = "*닉네임은 최대 10자까지 작성 가능합니다.";
-        } else if (username == user.username){
+        } else if (username == currentUsername){
             usernameError.textContent = "*현재 사용중인 닉네임으로는 변경할 수 없습니다."
         } else {
             usernameError.textContent = ""; 
@@ -191,6 +171,4 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     });
-
-    await getUser(); 
 });
