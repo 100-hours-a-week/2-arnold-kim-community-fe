@@ -373,8 +373,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     commentSubmit.addEventListener("click", async () => {
         if (editingComment) {
             editingComment.textContent = commentInput.value.trim(); 
+            console.log(editingComment.textContent)
             alert("댓글이 수정되었습니다.");
-            await editComment(editingCommentId, editingComment);
+            await editComment(editingCommentId, editingComment.textContent);
             commentSubmit.textContent = "댓글 등록";
             editingComment = null; 
         } else {
