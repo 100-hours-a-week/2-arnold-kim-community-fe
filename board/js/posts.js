@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const result = await response.json(); 
             posts = result.data;
+            console.log(JSON.stringify(posts))
 
             if (posts != null){
                 loadMorePosts(); 

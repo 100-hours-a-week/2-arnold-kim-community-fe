@@ -257,52 +257,51 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // async function editComment(commentId, newContent) {
-    //     try {
-    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
-    //             method: "PATCH",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-    //             },
-    //             body: JSON.stringify({
-    //                 content: newContent
-    //             })
-    //         });
+    async function editComment(commentId, newContent) {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/comments/${commentId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                },
+                body: JSON.stringify({
+                    content: newContent
+                })
+            });
 
-    //         if (!response.ok) {
-    //             const errData = await response.json();
-    //             throw new Error(errData.message);
-    //         }
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
 
-    //         await fetchComments();
-    //     } catch (error) {
-    //         console.error("댓글 수정 오류:", error);
-    //         alert(error.message);
-    //     }
-    // }
+            await fetchComments();
+        } catch (error) {
+            console.error("댓글 수정 오류:", error);
+            alert(error.message);
+        }
+    }
 
-    // async function deleteComment(commentId) {
-    //     try {
-    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments/${commentId}`, {
-    //             method: "DELETE",
-    //             headers: {
-    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-    //             }
-    //         });
+    async function deleteComment(commentId) {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/comments/${commentId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
 
-    //         if (!response.ok) {
-    //             const errData = await response.json();
-    //             throw new Error(errData.message);
-    //         }
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
 
-    //         await fetchComments();
-    //         alert("댓글이 삭제되었습니다.");
-    //     } catch (error) {
-    //         console.error("댓글 삭제 오류:", error);
-    //         alert(error.message);
-    //     }
-    // }
+            await fetchComments();
+        } catch (error) {
+            console.error("댓글 삭제 오류:", error);
+            alert(error.message);
+        }
+    }
     
 
     function renderComments(comments) {
@@ -317,7 +316,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const commentElement = document.createElement("div");
             commentElement.classList.add("comment");
 
-            commentElement.dataset.commentId = comment.commentId;
+            commentElement.dataset.commentId = comment.id;
     
             commentElement.innerHTML = `
                 <div class="comment-header">
@@ -362,9 +361,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             deleteButton.addEventListener("click", () => {
                 setModal("<h3>댓글을 삭제하시겠습니까?</h3>삭제한 내용은 복구할 수 없습니다.", async () => {
-                    alert("댓글이 삭제되었습니다.");
-                    // const commentId = commentElement.dataset.commentId;
-                    // await deleteComment(commentId); 
+                    const commentId = commentElement.dataset.commentId;
+                    await deleteComment(commentId); 
                 });
             });
     
@@ -376,7 +374,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (editingComment) {
             editingComment.textContent = commentInput.value.trim(); 
             alert("댓글이 수정되었습니다.");
-            // editComment(editingCommentId, editingComment);
+            await editComment(editingCommentId, editingComment);
             commentSubmit.textContent = "댓글 등록";
             editingComment = null; 
         } else {
