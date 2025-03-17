@@ -113,6 +113,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const data = await response.json();
                 const user = data.data;
                 localStorage.setItem("profileImgUrl", `${CONFIG.API_BASE_URL}/images/` + user.filePath)
+                localStorage.setItem("currentUsername", user.username)
+                localStorage.setItem("currentUserEmail", user.email)
                 console.log(user)
             }
         } catch (error) {
