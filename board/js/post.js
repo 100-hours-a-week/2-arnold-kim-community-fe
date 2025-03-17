@@ -23,6 +23,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let currentUser = localStorage.getItem("currentUsername");
     let liked;
+    let comments = [];
+    let editingComment;
+    let editingCommentId;
 
     async function fetchPost() {
         // fetch api를 이용하여 게시물 정보 가져오기
@@ -53,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             authorName.textContent = post.author;
             postDate.textContent = post.createdAt;
             liked = post.liked;
-            console.log(liked)
+            console.log(JSON.stringify(post));
             if (post.image == ""){
                 postImage.style.display = "none"; 
             } else {
@@ -64,7 +67,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             likeCount.textContent = formatCount(post.likes);
             viewCount.textContent = formatCount(post.views);
-            const comments = post.comments;
+            comments = post.comments;
+            
 
             if(comments != null){
                 commentCount.textContent = formatCount(post.comments.length);
@@ -172,7 +176,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             const result = await response.json();
-            console.log(JSON.stringify(result));
             // likeCount.textContent = formatCount(result.data.likes);
 
         } catch (error) {
@@ -197,7 +200,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             const result = await response.json();
-            console.log(JSON.stringify(result));
             // likeCount.textContent = formatCount(result.data.likes);
 
         } catch (error) {
@@ -206,54 +208,54 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // async function fetchComments() {
-    //     try {
-    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-    //             }
-    //         });
+    async function fetchComments() {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/comments/${postId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
 
-    //         if (!response.ok) {
-    //             const errData = await response.json();
-    //             throw new Error(errData.message || "댓글 데이터를 불러오는 데 실패했습니다.");
-    //         }
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message || "댓글 데이터를 불러오는 데 실패했습니다.");
+            }
 
-    //         const result = await response.json();
-    //         comments = result.data || [];
-    //         renderComments();
-    //     } catch (error) {
-    //         console.error("댓글 로딩 오류:", error);
-    //         alert(error.message)
-    //     }
-    // }
+            const result = await response.json();
+            comments = result.data || [];
+            renderComments(comments);
+        } catch (error) {
+            console.error("댓글 로딩 오류:", error);
+            alert(error.message)
+        }
+    }
 
-    // async function postComment(newContent){
-    //     try {
-    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/comments`, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-    //             },
-    //             body: JSON.stringify({
-    //                 content: newContent
-    //             })
-    //         });
+    async function postComment(newContent){
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/comments/${postId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                },
+                body: JSON.stringify({
+                    content: newContent
+                })
+            });
 
-    //         if (!response.ok) {
-    //             const errData = await response.json();
-    //             throw new Error(errData.message);
-    //         }
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
 
-    //         await fetchComments();
-    //     } catch (error) {
-    //         console.error("댓글 작성 오류:", error);
-    //         alert(error.message);
-    //     }
-    // }
+            await fetchComments();
+        } catch (error) {
+            console.error("댓글 작성 오류:", error);
+            alert(error.message);
+        }
+    }
 
     // async function editComment(commentId, newContent) {
     //     try {
@@ -307,10 +309,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const commentList = document.getElementById("comment-list");
         commentList.innerHTML = ""; 
     
-        let editingComment = null;
-        let editingCommentId = null;
-    
+        editingComment = null;
+        editingCommentId = null;
+
         comments.forEach(comment => {
+            
             const commentElement = document.createElement("div");
             commentElement.classList.add("comment");
 
@@ -320,7 +323,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="comment-header">
                     <!-- 작성자 정보 (왼쪽 정렬) -->
                     <div class="comment-info">
-                        <img class="comment-profile" src="${comment.authorProfile || "../assets/userProfile.jpg"}">
+                        <img class="comment-profile" src="${CONFIG.IMAGE_URL}${comment.authorProfile}">
                         <p class="comment-author">${comment.author}</p>
                         <p class="comment-date">${comment.createdAt}</p>
                     </div>
@@ -367,25 +370,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     
             commentList.appendChild(commentElement);
         });
-
-        commentSubmit.addEventListener("click", async () => {
-            if (editingComment) {
-                editingComment.textContent = commentInput.value.trim(); 
-                alert("댓글이 수정되었습니다.");
-                // editComment(editingCommentId, editingComment);
-                commentSubmit.textContent = "댓글 등록";
-                editingComment = null; 
-            } else {
-                // postComment(commentInput.value);
-                alert("댓글이 등록되었습니다.");
-            }
-
-            commentInput.value = "";
-            commentSubmit.classList.remove("active");
-            commentSubmit.setAttribute("disabled", "true");
-        });
     }
 
+    commentSubmit.addEventListener("click", async () => {
+        if (editingComment) {
+            editingComment.textContent = commentInput.value.trim(); 
+            alert("댓글이 수정되었습니다.");
+            // editComment(editingCommentId, editingComment);
+            commentSubmit.textContent = "댓글 등록";
+            editingComment = null; 
+        } else {
+            await postComment(commentInput.value);
+            alert("댓글이 등록되었습니다.");
+        }
+
+        commentInput.value = "";
+        commentSubmit.classList.remove("active");
+        commentSubmit.setAttribute("disabled", "true");
+
+        commentInput.focus();
+    });
+
     await fetchPost();
-    // await fetchComments();
+    await fetchComments();
 });
