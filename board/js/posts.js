@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             posts = result.data;
 
             if (posts != null){
-                console.log(JSON.stringify(posts));
                 loadMorePosts(); 
             }
             

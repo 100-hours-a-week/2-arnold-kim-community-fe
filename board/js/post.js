@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const commentSubmit = document.getElementById("comment-submit");
 
     let currentUser = localStorage.getItem("currentUsername");
+    let liked;
 
     async function fetchPost() {
         // fetch api를 이용하여 게시물 정보 가져오기
@@ -51,11 +52,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             authorProfile.src = `${CONFIG.IMAGE_URL}` + post.authorProfile;
             authorName.textContent = post.author;
             postDate.textContent = post.createdAt;
+            liked = post.liked;
+            console.log(liked)
             if (post.image == ""){
                 postImage.style.display = "none"; 
             } else {
                 postImage.src = `${CONFIG.IMAGE_URL}` + post.image;
             }
+            likeBtnStatus()
             
 
             likeCount.textContent = formatCount(post.likes);
@@ -83,18 +87,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     likeBtn.addEventListener("click", () => {
         let count = parseInt(likeCount.textContent.replace("k", "000")) || 0;
-        if (likeBtn.classList.contains("active")) {
-            likeBtn.classList.remove("active");
+        if (liked) {
             likeBtn.style.backgroundColor = "#d9d9d9";
             likeCount.textContent = formatCount(count - 1);
-            // deleteLike();
+            liked = false;
+            deleteLike();
         } else {
-            likeBtn.classList.add("active");
             likeBtn.style.backgroundColor = "#ACA0EB";
             likeCount.textContent = formatCount(count + 1);
-            // postLike();
+            liked = true;
+            postLike();
         }
     });
+
+    function likeBtnStatus() {
+        if (!liked) {
+            likeBtn.style.backgroundColor = "#d9d9d9";
+        } else {
+            likeBtn.style.backgroundColor = "#ACA0EB";
+        }
+    }
 
     commentInput.addEventListener("input", () => {
         if (commentInput.value.trim() !== "") {
@@ -144,53 +156,55 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // async function postLike() {
-    //     try {
-    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
-    //             method: "POST",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-    //             }
-    //         });
+    async function postLike() {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
 
-    //         if (!response.ok) {
-    //             const errData = await response.json();
-    //             throw new Error(errData.message);
-    //         }
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
 
-    //         const result = await response.json();
-    //         likeCount.textContent = result.data.likes;
+            const result = await response.json();
+            console.log(JSON.stringify(result));
+            // likeCount.textContent = formatCount(result.data.likes);
 
-    //     } catch (error) {
-    //         console.error("좋아요 오류:", error);
-    //         alert(error.message)
-    //     }
-    // }
+        } catch (error) {
+            console.error("좋아요 오류:", error);
+            alert(error.message)
+        }
+    }
 
-    // async function deleteLike() {
-    //     try {
-    //         const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
-    //             method: "DELETE",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-    //             }
-    //         });
+    async function deleteLike() {
+        try {
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}/like`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
 
-    //         if (!response.ok) {
-    //             const errData = await response.json();
-    //             throw new Error(errData.message);
-    //         }
+            if (!response.ok) {
+                const errData = await response.json();
+                throw new Error(errData.message);
+            }
 
-    //         const result = await response.json();
-    //         likeCount.textContent = result.data.likes;
+            const result = await response.json();
+            console.log(JSON.stringify(result));
+            // likeCount.textContent = formatCount(result.data.likes);
 
-    //     } catch (error) {
-    //         console.error("좋아요 오류:", error);
-    //         alert(error.message)
-    //     }
-    // }
+        } catch (error) {
+            console.error("좋아요 오류:", error);
+            alert(error.message)
+        }
+    }
 
     // async function fetchComments() {
     //     try {
