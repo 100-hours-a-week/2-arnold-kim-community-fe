@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             postContent.textContent = post.content;
             authorProfile.src = `${CONFIG.IMAGE_URL}` + post.authorProfile;
             authorName.textContent = post.author;
-            postDate.textContent = post.date;
+            postDate.textContent = post.createdAt;
             if (post.image == ""){
                 postImage.style.display = "none"; 
             } else {
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             postBtnDisplay();
         } catch (error) {
             console.error("게시글 로딩 오류:", error);
-            alert(error.message)
+            alert(error)
         }
     }
 
@@ -113,28 +113,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     deletePostBtn.addEventListener("click", () => {
         setModal("<h3>게시글을 삭제하시겠습니까?</h3>삭제한 내용은 복구할 수 없습니다.", async () => {
             alert("게시글이 삭제되었습니다.");
-            window.location.href = "posts.html";
 
             // fetch api를 사용하여 게시글 삭제하기
-            // try {
-            //     const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}`, {
-            //         method: "DELETE",
-            //         headers: {
-            //             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-            //         }
-            //     });
+            try {
+                const response = await fetch(`${CONFIG.API_BASE_URL}/posts/${postId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                    }
+                });
 
-            //     if (!response.ok) {
-            //         const resBody = await response.json();
-            //         throw new Error(resBody.message);
-            //     }
+                if (!response.ok) {
+                    const resBody = await response.json();
+                    throw new Error(resBody.message);
+                }
 
-            //     window.location.href = "posts.html";
+                window.location.href = "posts.html";
 
-            // } catch (error) {
-            //     console.error(error);
-            //     alert(error.message);
-            // }
+            } catch (error) {
+                console.error(error);
+                alert(error.message);
+            }
         });
     });
 
@@ -309,7 +308,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <div class="comment-info">
                         <img class="comment-profile" src="${comment.authorProfile || "../assets/userProfile.jpg"}">
                         <p class="comment-author">${comment.author}</p>
-                        <p class="comment-date">${comment.date}</p>
+                        <p class="comment-date">${comment.createdAt}</p>
                     </div>
     
                     <!-- 수정/삭제 버튼 (기본적으로 숨김) -->

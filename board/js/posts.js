@@ -14,37 +14,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     async function fetchPosts() {
+        // fetch API를 이용하여 게시글 목록 가져오기
         try {
-            const response = await fetch("../data/posts.json");
-            if (!response.ok) throw new Error("게시글 데이터를 불러오는 데 실패했습니다.");
-            posts = await response.json();
-            loadMorePosts(); 
+            const response = await fetch(`${CONFIG.API_BASE_URL}/posts/`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
+
+            const result = await response.json(); 
+            posts = result.data;
+
+            if (posts != null){
+                console.log(JSON.stringify(posts));
+                loadMorePosts(); 
+            }
+            
         } catch (error) {
             console.error("데이터 로딩 오류:", error);
         }
-
-        // fetch API를 이용하여 게시글 목록 가져오기
-        // try {
-        //     const response = await fetch(`${CONFIG.API_BASE_URL}/posts`, {
-        //         method: "GET",
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //             // "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-        //         }
-        //     });
-
-        //     if (!response.ok) {
-        //         const errorData = await response.json();
-        //         throw new Error(errorData.message);
-        //     }
-
-        //     const result = await response.json(); 
-        //     posts = result.data;
-
-        //     loadMorePosts(); 
-        // } catch (error) {
-        //     console.error("데이터 로딩 오류:", error);
-        // }
     }
 
     function formatCount(count) {
@@ -61,12 +56,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         postElement.innerHTML = `
             <h3 class="post-title">${postData.title.length > 26 ? postData.title.substring(0, 26) + "..." : postData.title}</h3>
             <div class="post-info">
-                <span>좋아요 ${formatCount(postData.likes)} 댓글 ${formatCount(postData.comments.length)} 조회수 ${formatCount(postData.views)}</span>
-                <span>${postData.date}</span>
+                <span>좋아요 ${formatCount(postData.likes)} 댓글 ${formatCount(postData.comments)} 조회수 ${formatCount(postData.views)}</span>
+                <span>${postData.createdAt}</span>
             </div>
             <div class="post-divider"></div>
             <div class="post-author">
-                <img class="author-img" src="${postData.authorProfile ? postData.authorProfile : defaultProfileImg}">
+                <img class="author-img" src="${postData.authorProfile ? `${CONFIG.IMAGE_URL}` + postData.authorProfile : defaultProfileImg}">
                 <span>${postData.author}</span>
             </div>
         `;
