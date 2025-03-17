@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         backToPosts.addEventListener("click", () => {
-            window.history.back();
+            window.location.href = "../board/posts.html";
         });
       })
       .catch((err) => console.error(err));
