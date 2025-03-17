@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
             userProfile.src = storedUrl;
         }
         
-        console.log(userProfile.src);
         userProfile.addEventListener("click", () => {
             window.location.href = "../user/editProfile.html";
         });

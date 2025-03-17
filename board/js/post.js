@@ -40,8 +40,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             const result = await response.json();
-            console.log(JSON.stringify(result));
-
             const post = result.data;
             if (!post) {
                 postTitle.textContent = "게시글을 찾을 수 없습니다.";
@@ -53,7 +51,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             authorProfile.src = `${CONFIG.IMAGE_URL}` + post.authorProfile;
             authorName.textContent = post.author;
             postDate.textContent = post.date;
-            postImage.src = `${CONFIG.IMAGE_URL}` + post.image;
+            if (post.image == ""){
+                postImage.style.display = "none"; 
+            } else {
+                postImage.src = `${CONFIG.IMAGE_URL}` + post.image;
+            }
+            
 
             likeCount.textContent = formatCount(post.likes);
             viewCount.textContent = formatCount(post.views);
