@@ -134,7 +134,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                     setTimeout(() => {
                         editCompleteBtn.style.display = "none";
                     }, 2000);
+                    setTimeout(() => {
+                        window.location.href = "../board/posts.html";
+                    }, 2000)
                 }
+
+                const result = await response.json();
+                console.log(JSON.stringify(result));
+
+                if (result.data.username != ""){
+                    localStorage.setItem("currentUsername", result.data.username);
+                }
+                if (result.data.filePath != "") {
+                    localStorage.setItem("profileImgUrl", `${CONFIG.IMAGE_URL}` + result.data.filePath)
+                }
+                
             } else {
                 const errorData = await response.json();
                 usernameError.textContent = errorData.errorDetails.usernameError;
