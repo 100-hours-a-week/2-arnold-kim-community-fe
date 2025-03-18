@@ -137,11 +137,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             } else {
                 const errorData = await response.json();
-                usernameError.textContent = errorData.error;
-                console.log(`${JSON.stringify(errorData)}`);
+                usernameError.textContent = errorData.errorDetails.usernameError;
+                console.log(JSON.stringify(errorData));
+                throw new Error(error);
             }
         } catch (error) {
-            usernameError.textContent = `${error.message}`;
             updateButtonState();
         }
     });
