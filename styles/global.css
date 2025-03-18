@@ -4,6 +4,7 @@ body {
     align-items: center;
     height: 100vh;
     overflow-x: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #header-container {
