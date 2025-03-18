@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const profileImage = document.getElementById("profile-image");
     const profileUpload = document.getElementById("profile-upload");
     const editCompleteBtn = document.getElementById("edit-profile-complete-btn");
+    const backToPosts = document.getElementById("back");
 
     // let user;
     let file;
@@ -23,6 +24,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         userProfile.src = storedUrl;
         profileImage.src = storedUrl
     }
+
+    backToPosts.addEventListener("click", () => {
+        window.location.href = "../board/posts.html";
+    });
 
     profileDropdown.classList.add("profile-dropdown");
     profileDropdown.innerHTML = `
