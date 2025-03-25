@@ -2,6 +2,7 @@ import CONFIG from "../../config.js";
 import { validatePassword } from "../../utils/validate.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+    const passwordPrevInput = document.getElementById("password-prev")
     const passwordInput = document.getElementById("password");
     const passwordCheckInput = document.getElementById("password-check");
 
@@ -54,8 +55,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     editBtn.addEventListener("click", async () => {
         if (passwordError.textContent === "" && validatePasswordCheck) {
-            editCompleteBtn.style.display = "block"; // 토스트 메시지 표시
-    
             // fetch API를 이용하여 비밀번호 변경
             try {
                 const response = await fetch(`${CONFIG.API_BASE_URL}/users/password`, {
@@ -65,13 +64,26 @@ document.addEventListener("DOMContentLoaded", async () => {
                         "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                     },
                     body: JSON.stringify({
-                        password: passwordInput.value
+                        passwordPrev : passwordPrevInput.value,
+                        password: passwordInput.value, 
+                        passwordCheck : passwordCheckInput.value
                     })
                 });
 
-                setTimeout(() => {
-                    editCompleteBtn.style.display = "none";
-                }, 2000);
+                console.log(JSON.stringify(response));
+                if (response.ok){
+                    editCompleteBtn.style.display = "block"; // 토스트 메시지 표시
+    
+                    setTimeout(() => {
+                        editCompleteBtn.style.display = "none";
+                    }, 2000);
+                } else {
+                    const result = await response.json();
+                    // alert(result.error);
+                    console.log(JSON.stringify(result));
+                    throw new Error(result.message);
+                }
+                
 
             } catch (error) {
                 alert(`오류 발생: ${error.message}`);

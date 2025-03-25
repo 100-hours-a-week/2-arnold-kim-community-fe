@@ -82,7 +82,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 window.location.href = "posts.html";
             } else {
                 const result = await response.json();
-                console.log(result.message);
+                console.log(JSON.stringify(result));
+                alert(JSON.stringify(result.error));
                 throw new Error(result.message);
             }
 
